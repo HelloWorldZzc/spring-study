@@ -1,0 +1,10 @@
+package com.test.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+//springmvc配置类，本质上还是一个spring配置类
+@Configuration
+@ComponentScan("com.test.controller")
+public class SpringMvcConfig {
+}
