@@ -1,0 +1,5 @@
+com\test\domain\address.class
+com\test\config\ServletContainersInitConfig.class
+com\test\config\SpringMvcConfig.class
+com\test\domain\user.class
+com\test\controller\UserController.class
