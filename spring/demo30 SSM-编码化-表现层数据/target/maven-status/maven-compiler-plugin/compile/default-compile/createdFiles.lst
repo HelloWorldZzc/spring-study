@@ -1,0 +1,11 @@
+com\test\config\springmvcConfig.class
+com\test\controller\code.class
+com\test\domain\book.class
+com\test\dao\bookDao.class
+com\test\config\mybatisConfig.class
+com\test\config\servletConfig.class
+com\test\config\JdbcConfig.class
+com\test\controller\bookController.class
+com\test\service\bookservice.class
+com\test\controller\result.class
+com\test\config\springConfig.class
