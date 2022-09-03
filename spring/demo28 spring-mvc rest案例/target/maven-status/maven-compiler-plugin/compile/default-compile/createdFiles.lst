@@ -1,0 +1,5 @@
+com\test\controller\bookController.class
+com\test\config\springmvcSupport.class
+com\test\config\ServletContainersInitConfig.class
+com\test\domain\Book.class
+com\test\config\SpringMvcConfig.class
