@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.userMapper">
+<!--user getUserById(@Param("id") Integer id);-->
+    <select id="getUserById" resultType="user">
+        select * from tb_user where id=#{id};
+    </select>
+
+<!--List<user> getUserAll();-->
+    <select id="getUserAll" resultType="user">
+        select * from tb_user;
+    </select>
+
+<!--Integer getIDSum();-->
+<select id="getIDSum" resultType="Integer">
+    select sum(id) from tb_user
+</select>
+
+<!--List<Map<String,String>> getUserTOMap();-->
+    <select id="getUserTOMap" resultType="map">
+        select * from tb_user;
+    </select>
+
+<!--Map<String,Object> getUserTOMap2();-->
+
+    <select id="getUserTOMap2" resultType="map">
+        select * from tb_user;
+    </select>
+</mapper>

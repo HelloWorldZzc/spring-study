@@ -1,0 +1,72 @@
+在本项目中，根据不同需求的返回功能，返回不同的值，同样的也有不同的方法做记录
+-----------------------------------------
+tip:
+    如果使用user u去接返回的参数，如果返回0或1，那是可以正常展示出来的
+    但如果返回多条，那么会报TooManyResultsException
+    此时我们可以使用容器进行把数据装载
+
+
+1、正常的查询方式--->根据id查询用户信息
+user getUserById(@Param("id") Integer id);
+    <select id="getUserById" resultType="user">
+        select * from tb_user where id=#{id};
+    </select>
+
+
+2、正常的查询方式--->查询所有用户信息
+List<user> getUserAll();
+    <select id="getUserAll" resultType="user">
+        select * from tb_user;
+    </select>
+
+3、需要返回int类型--->查询id的和(因为需要resultType属性，需要自己设置)
+Integer getIDSum();
+<select id="getIDSum" resultType="Integer">
+    select sum(id) from tb_user
+</select>
+
+resultType--->mybatis帮我们设置了别名，我们可以分方便的使用
+    <!--
+        MyBatis中为Java中常用的类型设置了类型别名
+        Integer：Integer，int
+        int：_int,_integer
+        Map：map
+        String：string
+    -->
+
+4、map类型--->根据id查询用户信息为map集合（因为可能产生多条数据，但map只能返回一条）
+     此时有两种解决方案：
+     1、将mapper接口方法的返回值设置为泛型是map的list集合
+     List<Map<String, Object>> getAllUserToMap();
+     结果：{password=123456, gender=男, id=1, age=23, email=12345@qq.com, username=admin},{password=123456, gender=男, id=1, age=23, email=12345@qq.com, username=admin}
+     2、可以将每条数据转换的map集合放在一个大的map中，但是必须要通过@MapKey注解
+     将查询的某个字段的值作为大的map的键
+     @MapKey("id")
+     Map<String, Object> getAllUserToMap();
+     结果：
+     {
+      1={password=123456, gender=男, id=1, age=23, email=12345@qq.com, username=admin},
+      2={password=123, gender=男, id=2, age=23, email=12345@qq.com, username=zhangsan},
+      3={password=123456, gender=女, id=3, age=33, email=123@qq.com, username=root},
+      4={password=123, id=4, username=lisi}
+      }
+代码1
+     List<Map<String,String>> getUserTOMap();
+         <select id="getUserTOMap" resultType="map">
+             select * from tb_user;
+         </select>
+     -----------------------------------------
+代码2
+     @MapKey("id")
+         Map<String,Object> getUserTOMap2()
+        <select id="getUserTOMap2" resultType="map">
+                select * from tb_user;
+            </select>
+
+--------------------------------------------------------------------------------------------
+
+特殊的查询（不能直接使用#{}的查询）
+1、模糊查询--->有三种写法
+2、处理批量删除--->MySQL写法：in(1,2)--->在其中写法 in(${})
+3、指定表名---->${}--->由于在一些字段中不能添加‘’，因此不能使用#{}
+4、mybatis获取自增组件---->使用参数useGeneratedKeys="true" keyProperty="id"
