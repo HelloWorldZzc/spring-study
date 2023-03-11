@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.userMapper">
+    <!--执行添加语句 id是唯一的，表明实现这个mapper下的这个方法-->
+    <insert id="addUser">
+        insert into tb_user values(null,'admin','123456')
+    </insert>
+</mapper>
