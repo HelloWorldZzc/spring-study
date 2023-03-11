@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.userMapper">
+    <!--执行添加语句 id是唯一的，表明实现这个mapper下的这个方法-->
+    <insert id="addUser">
+        insert into tb_user values(null,'admin','123456')
+    </insert>
+    <update id="updateUser">
+        update tb_user t set t.username="admin1" where t.id=1
+    </update>
+    <delete id="delete">
+        delete from tb_user  where id=4
+    </delete>
+    <select id="show_id1" resultType="user">
+        select * from tb_user where id=2;
+    </select>
+    <select id="show_all" resultType="user">
+        select * from tb_user;
+    </select>
+</mapper>
