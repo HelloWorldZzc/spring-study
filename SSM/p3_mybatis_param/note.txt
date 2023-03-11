@@ -1,0 +1,43 @@
+之前的SQL语句中都是写死的，介绍5种mybatis获取参数的方式
+前置：
+    MyBatis获取参数值的两种方式：#{}(推荐，占位符)和${}(字符串拼接，注意引号问题)
+---------------------------------------------
+1、若mapper接口方法的参数为单个的字面量类型（）
+    此时可以通过#{}和${}以任意的内容获取参数值
+user getUserByUsername(String username);
+select * from tb_user where username=#{any}
+
+
+2、若mapper接口方法的参数为多个的字面量类型，此时MyBatis会将参数放在map集合中，以两种方式存储数据
+    1）以arg0,arg1...为键，以参数为值
+    2）以param1,param2...为键，以参数为值
+    因此，只需要通过#{}和${}访问map集合的键，就可以获取相对应的值
+user checkLogin(String username, String password);
+select * from tb_user where username=#{arg0} and password=#{param2}
+
+
+3、若mapper接口方法的参数为map集合类型的参数，只需要通过#{}和${}访问map集合的键即可
+user checkLoginByMap(Map<String, String> map);
+select * from tb_user where username=#{username} and password=#{password}
+Map<String,String> map=new HashMap<>();
+map.put("username","admin");
+map.put("password","123456");
+
+4、若mapper接口方法的参数为实体类类型的参数，只需要通过#{}和${}访问实体类中的属性名即可
+void insertUser(user u);
+insert into tb_user values(null ,#{name},#{word});
+
+4.5、两者结合（2,4）
+ void insertUserPlus(user u1,user u2);
+ insert into tb_user values(null ,#{arg0.username},#{param2.password})
+
+
+5、可以在mapper接口方法的参数上设置@Param注解
+此时MyBatis会将这些参数放在map中，以两种方式进行存储
+a>以@Param注解的value属性值为键，以参数为值
+b>以param1,param2...为键，以参数为值
+只需要通过#{}和${}访问map集合的键获取值
+user checkLoginByParam(@Param ("name") String username,@Param("pwd") String password);
+select * from tb_user where username=#{name} and password=#{pwd};
+
+在平常的使用中，一般使用第4（传入对象）,5（使用注解的方式进行操作）

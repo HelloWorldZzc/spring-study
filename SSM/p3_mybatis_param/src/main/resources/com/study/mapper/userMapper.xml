@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.userMapper">
+<!--user getUserByUsername(String username);-->
+    <select id="getUserByUsername" resultType="user">
+        select * from tb_user where username=#{any}
+    </select>
+
+<!--user checkLogin(String username, String password);-->
+    <select id="checkLogin" resultType="user">
+        select * from tb_user where username=#{arg0} and password=#{param2}
+    </select>
+
+<!--user checkLoginByMap(Map<String, Object> map);-->
+    <select id="checkLoginByMap" resultType="user">
+        select * from tb_user where username=#{name} and password=#{psd}
+    </select>
+
+<!--void insertUser(user u);-->
+    <insert id="insertUser">
+        insert into tb_user values(null ,#{username},#{password});
+    </insert>
+
+<!-- void insertUserPlus(user u1,user u2);-->
+    <insert id="insertUserPlus">
+        insert into tb_user values(null ,#{arg0.username},#{param2.password})
+    </insert>
+
+<!--user checkLoginByParam(@Param ("name") String username,@Param("pwd") String password)-->
+    <select id="checkLoginByParam" resultType="user">
+        select * from tb_user where username=#{name} and password=#{pwd};
+    </select>
+
+<!--    void add(@Param("p1") user u1,@Param("p2") user u2);-->
+    <insert id="add">
+        insert into tb_user values (null ,#{p1.username},#{p2.password})
+    </insert>
+</mapper>
