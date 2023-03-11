@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 通过jdbc.properties文件读取其中的数据，那么需要引入-->
+    <properties resource="jdbc.properties" />
+    <typeAliases>
+<!--        <typeAlias type="com.study.pojo.user" alias="abc"></typeAlias>-->
+<!--        <typeAlias type="com.study.pojo.user"></typeAlias>-->
+        <package name="com.study.pojo"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--引入映射文件(操作MySQL需要SQL语句，不能在核心配置文件中写，在其他文件中写，再进行引入)-->
+    <mappers>
+<!--        <mapper resource="mapper\userMapper.xml"></mapper>-->
+<!--名称要一样，因为编译后，需要放在同一个目录下-->
+        <package name="com.study.mapper"/>
+    </mappers>
+</configuration>
