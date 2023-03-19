@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.empMapper">
+    <cache/>
+    <!--Emp getEmpById(@Param("empId") Integer empId);-->
+    <select id="getEmpById" resultType="Emp">
+        select * from t_emp where emp_id = #{empId}
+    </select>
+<!--添加员工信息 void insertEmp(emp emp);-->
+<insert id="insertEmp">
+    insert into t_emp values (null,#{emp_name},#{age},null)
+</insert>
+</mapper>

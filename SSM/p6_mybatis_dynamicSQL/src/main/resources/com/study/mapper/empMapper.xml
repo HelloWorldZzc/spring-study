@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.empMapper">
+<!--
+根据条件查询员工信息（条件不定）
+List<emp> getEmpByCondition(emp emp);
+where 与if 的连用
+-->
+
+<select id="getEmpByCondition" resultType="emp">
+    select * from t_emp
+    <where>
+        <if test="emp_name !=null and emp_name !='' ">
+           and emp_name=#{emp_name}
+        </if>
+        <if test="age !=null and age !=''">
+           and age=#{age}
+        </if>
+    </where>
+</select>
+
+<!-- if 与 trim-->
+    <select id="getEmpByCondition2" resultType="emp">
+        select * from t_emp
+        <trim prefix="where" suffixOverrides="and">
+                <if test="emp_name !=null and emp_name !='' ">
+                     emp_name=#{emp_name} and
+                </if>
+                <if test="age !=null and age !=''">
+                     age=#{age} and
+                </if>
+        </trim>
+    </select>
+
+<!--choose、when、otherwise-->
+    <select id="getEmpByCondition3" resultType="emp">
+        select * from t_emp
+        <where>
+                <choose>
+                    <when test="emp_name !=null and emp_name !='' ">
+                        emp_name=#{emp_name}
+                    </when>
+                    <when test="age !=null and age !=''">
+                        age=#{age}
+                    </when>
+                </choose>
+        </where>
+
+    </select>
+
+<!--批量添加 foreach
+    void insertMoreEmp(@Param("emps") List<emp> emps);-->
+    <insert id="insertMoreEmp">
+        insert into t_emp values
+        <foreach collection="emps" item="emp" separator=",">
+            (null,#{emp.emp_name},#{emp.age},#{emp.dept_id})
+        </foreach>
+    </insert>
+
+<!--
+批量删除
+void deleteMoreEmp(@Param("empIds") Integer[] empIds);-->
+<!--    <delete id="deleteMoreEmp">-->
+<!--        delete from t_emp where-->
+<!--<foreach collection="empIds" item="emp" separator="or">-->
+<!--    emp_id=#{emp}-->
+<!--</foreach>-->
+<!--    </delete>-->
+    <delete id="deleteMoreEmp">
+        delete from t_emp where emp_id in
+<foreach collection="empIds" item="id" close=")" open="(" separator=",">
+    #{id}
+</foreach>
+    </delete>
+</mapper>

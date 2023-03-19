@@ -1,0 +1,35 @@
+备本项目介绍动态SQL相关内容
+--举例：在查询语句中，根据不同的查询方式，会生成不同的SQL语句，这个时候就需要使用动态SQL语句了
+
+1、SQL片段
+    很多SQL经常写的东西，可以把他写成SQL片段，使用的时候直接调用这个SQL片段
+举例：
+    <sql id="empColumns">
+            emp_id,emp_name,age,gender,dept_id
+    </sql>
+
+    select <include refid="empColumns"></include> from t_emp
+
+2、if
+    通过test属性中的表达式判断标签中的内容是否有效（是否会拼接到sql中）
+
+ 3、where
+    a.若where标签中有条件成立，会自动生成where关键字
+    b.会自动将where标签中内容前多余的and去掉，但是其中内容后多余的and无法去掉（感觉本质上就是去掉where旁边and）
+    c.若where标签中没有任何一个条件成立，则where没有任何功能
+
+ 4、trim
+    prefix、suffix：在标签中内容前面或后面添加指定内容
+    prefixOverrides、suffixOverrides：在标签中内容前面或后面去掉指定内容
+
+ 5、choose、when、otherwise
+    相当于java中的if...else if...else，when至少设置一个，otherwise最多设置一个
+
+ 6、foreach
+    collection：设置要循环的数组或集合
+    item：用一个字符串表示数组或集合中的每一个数据
+    separator：设置每次循环的数据之间的分隔符
+    open：循环的所有内容以什么开始--->（放在foreach的开头）
+    close：循环的所有内容以什么结束---->（放在foreach的结尾）
+
+原理 mybatis封装的jdbc来实现相关的功能
