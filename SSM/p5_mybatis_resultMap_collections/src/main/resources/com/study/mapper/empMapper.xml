@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.study.mapper.empMapper">
+<!--分步查询 第二部
+    List<emp> getDeptAndEmpByStepTwo(@Param("deptId") Integer deptId);
+    同理 在mybatis-config中配置好的，直接写resultType即可
+    这里没有修改配置文件，导致映射不到，因此需要写resultMap
+    -->
+    <resultMap id="getDeptAndEmpByStepTwoMap" type="com.study.pojo.emp">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+    </resultMap>
+    <select id="getDeptAndEmpByStepTwo" resultMap="getDeptAndEmpByStepTwoMap">
+        select * from t_emp where dept_id=#{deptId}
+    </select>
+</mapper>
