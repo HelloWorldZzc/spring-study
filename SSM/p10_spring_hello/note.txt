@@ -1,0 +1,51 @@
+spring学习的入门文档
+1、Spring介绍：
+    Spring 是最受欢迎的企业级 Java 应用程序开发框架，数以百万的来自世界各地的开发人员使用
+    Spring 框架来创建性能好、易于测试、可重用的代码。
+
+2、Spring家族：https://spring.io/projects
+
+3、Spring Framework
+    Spring 基础框架，可以视为 Spring 基础设施，基本上任何其他 Spring 项目都是以 Spring Framework为基础的。
+    特性(具体可查看文件Spring部分)：
+        非侵入式
+        控制反转IOC（翻转资源获取方向，把自己创建资源，向环境取资源变成环境将资源准备好，我们享受注入）
+        面向切面编程AOP（在不修改源代码的基础上增强代码的功能）
+        容器
+        组件化
+        声明式
+        一站式
+
+4、功能模块
+    Core Container---> 核心容器，在spring环境下使用任何功能都必须基于IOC容器
+    AOP & Aspects---->面向切面编程
+    Testing---->提供了对 junit 或 TestNG 测试框架的整合
+    Data Access/Integration---->提供了对数据访问/集成的功能
+    Spring MVC---->提供了面向Web应用程序的集成功能
+
+5、IOC反转控制思想
+IOC容器在Spring中的实现
+    Spring 的 IOC 容器就是 IOC 思想的一个落地的产品实现。IOC 容器中管理的组件也叫做 bean。在创建bean 之前，首先需要创建 IOC 容器。Spring 提供了 IOC 容器的两种实现方式：
+1、BeanFactory
+    这是 IOC 容器的基本实现，是 Spring 内部使用的接口。面向 Spring 本身，不提供给开发人员使用。
+2、ApplicationContext
+    BeanFactory 的子接口，提供了更多高级特性。面向 Spring 的使用者，几乎所有场合都使用ApplicationContext 而不是底层的 BeanFactory。
+3、ApplicationContext的主要实现类
+    ClassPathXmlApplicationContext ===》 通过读取类路径下的 XML 格式的配置文件创建 IOC 容器对象
+    FileSystemXmlApplicationContext ===》 通过文件系统路径读取 XML 格式的配置文件创建 IOC 容器对象
+    ConfigurableApplicationContext ===》ApplicationContext 的子接口，包含一些扩展方法refresh() 和 close() ，让 ApplicationContext 具有启动、关闭和刷新上下文的能力。
+    WebApplicationContext ===》 专门为 Web 应用准备，基于 Web 环境创建 IOC 容器对象，并将对象引入存入 ServletContext 域中。
+
+6、代码实现过程
+part1 hello world
+    创建对象--->用于实例
+    创建spring的配置文件(名字可以随便取，因为在测试类中需要手动指定，但是在springMVC中默认为applicationContext)
+        创建bean 指定id的过程与mybatis中指定依赖的过程差不多
+    在test文件中 导入spring的配置文件 在获取bean --->获取到了对象默认为object，可以使用强转成指定类型，那么就能调用他的方法了
+
+part2 IOC底层--->反射+工厂模式创建对象，利用反射调用其中的空参方法创建
+
+part3 bean获取的三种方式（在测试代码中更加详细）
+1、根据id
+2、根据类型
+3、根据类型和id

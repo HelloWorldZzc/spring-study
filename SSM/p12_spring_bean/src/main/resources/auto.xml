@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--bean自动装配的相关文件夹-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--不使用自动装配 依赖注入的方式-->
+<!--    <bean id="userController" class="com.study.contoller.userController.userController">-->
+<!--        <property name="userServer" ref="userSever"/>-->
+<!--    </bean>-->
+<!--    <bean id="userSever" class="com.study.server.userServer">-->
+<!--        <property name="userDao" ref="userDao"/>-->
+<!--    </bean>-->
+<!--    <bean id="userDao" class="com.study.dao.userDao"/>-->
+
+<!--使用自动装配的方式 有两种格式 byType 与 byName-->
+    <bean id="userController" class="com.study.contoller.userController.userController" autowire="byType"/>
+    <bean id="userSever" class="com.study.server.userServer" autowire="byType"/>
+    <bean id="userDao" class="com.study.dao.userDao" autowire="byType"/>
+
+</beans>

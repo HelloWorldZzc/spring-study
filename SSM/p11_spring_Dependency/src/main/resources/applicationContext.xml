@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:P="http://www.springframework.org/schema/p" xmlns:p="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+<!--依赖注入之setter注入，是根据对象的set方法完成的 若set对象有啥设定这也会同样的展示出来-->
+    <bean id="student1" class="com.study.pojo.student">
+    <property name="sname" value="张三"/>
+    <property name="age" value="12"/>
+    <property name="sid" value="1001"/>
+</bean>
+
+<!--依赖注入之构造器注入-->
+    <bean id="student2" class="com.study.pojo.student">
+        <constructor-arg name="sname" value="李四"/>
+        <constructor-arg name="sid" value="1002"/>
+        <constructor-arg name="age" value="13"/>
+    </bean>
+<!--特殊值处理 设置年龄为null（并非字符串） 姓名带特殊符号 -->
+    <bean id="student3" class="com.study.pojo.student">
+        <!--设置null值，可以使用null标签符-->
+        <property name="age">
+            <null/>
+        </property>
+        <!--使用此格式，在其中任何字符都不会被解析  ps:也可以使用xml实体转义-->
+        <property name="sname">
+            <value><![CDATA[<zs>]]></value>
+        </property>
+        <property name="sid" value="1003"/>
+    </bean>
+
+    <bean id="student4" class="com.study.pojo.student">
+        <property name="sid" value="1004"/>
+        <property name="age" value="13"/>
+        <property name="sname" value="赵四"/>
+        <property name="hobby">
+            <array>
+                <value>吃饭</value>
+                <value>睡觉</value>
+                <value>打豆豆</value>
+            </array>
+        </property>
+    </bean>
+
+<!--为类赋值第一种方式 先创建类的bean 在在其中赋值 外部bean-->
+    <bean class="com.study.pojo.clazz" id="class1">
+        <property name="name" value="班级1"/>
+        <property name="cid" value="C001"/>
+    </bean>
+    <bean class="com.study.pojo.student" id="student5">
+        <property name="sname" value="王五"/>
+        <property name="age" value="13"/>
+        <property name="sid" value="1005"/>
+        <property name="clazz" ref="class1">
+
+        </property>
+    </bean>
+
+<!--类赋值的第二种形式 内部bean-->
+    <bean id="student6" class="com.study.pojo.student">
+        <property name="sname" value="谢六"/>
+        <property name="age" value="14"/>
+        <property name="sid" value="1006"/>
+        <property name="clazz">
+            <!--这里可以不写id 为什么？ 参考匿名内部类 没有人可以调用 写了也白写（不能在外部通过IOC容器获取）-->
+            <bean class="com.study.pojo.clazz">
+                <property name="cid" value="C002"/>
+                <property name="name" value="班级2"/>
+            </bean>
+        </property>
+    </bean>
+
+<!--为list集合赋值(如果是set集合 把list改为set即可)-->
+<!--因为集合需要的类型是student类型，所以需要指定bean 否则直接使用value属性即可-->
+    <bean id="class2" class="com.study.pojo.clazz">
+        <property name="name" value="班级3"/>
+        <property name="cid" value="C003"/>
+        <property name="student">
+            <list>
+                <bean class="com.study.pojo.student">
+                    <property name="sid" value="111111"/>
+                </bean>
+                <ref bean="student5"/>
+                <ref bean="student6"/>
+            </list>
+        </property>
+    </bean>
+
+<!--map类型集合-->
+    <bean class="com.study.pojo.teacher" id="t1">
+        <property name="tid" value="001"/>
+        <property name="subject" value="语文"/>
+    </bean>
+    <bean class="com.study.pojo.teacher" id="t2">
+        <property name="subject" value="数学"/>
+        <property name="tid" value="002"/>
+    </bean>
+
+<!--使用传统的方式 展示clazz3-->
+    <bean class="com.study.pojo.clazz" id="class3">
+        <property name="teacherMap">
+            <map>
+                <entry>
+                    <key>
+                        <!--自己定义的类型哦，string-->
+                        <value>编号1</value>
+                    </key>
+                        <!-- 也是自己定义的类型，teacher 不使用ref就要自己定义bean -->
+                        <ref bean="t1"/>
+                </entry>
+                <entry>
+                    <key>
+                        <!--自己定义的类型哦，string-->
+                        <value>编号2</value>
+                    </key>
+                    <!-- 也是自己定义的类型，teacher 不使用ref就要自己定义bean -->
+                    <ref bean="t2"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+<!--
+其他方法 使用util规则的
+原理都是差不多的，只是一个是写在里面按照格式慢慢罗列
+一个是已经用util规则写好了 在这个pro的时候直接引用即可
+-->
+    <util:list id="lists">
+        <ref bean="student5"/>
+        <bean class="com.study.pojo.student">
+            <property name="sid" value="666"/>
+        </bean>
+    </util:list>
+
+    <util:map id="maps">
+        <entry>
+            <key>
+                <value>教师3</value>
+            </key>
+            <ref bean="t1"/>
+        </entry>
+        <entry>
+            <key>
+                <value>教师4</value>
+            </key>
+            <ref bean="t2"></ref>
+        </entry>
+    </util:map>
+    <bean id="class4" class="com.study.pojo.clazz">
+        <property name="student" ref="lists"/>
+        <property name="teacherMap" ref="maps"/>
+    </bean>
+
+<!-- p标签的使用（了解有这样一种写法即可）-->
+    <bean id="s" class="com.study.pojo.teacher" P:tid="100">
+
+    </bean>
+</beans>

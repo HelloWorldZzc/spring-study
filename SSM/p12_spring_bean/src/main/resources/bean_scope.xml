@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--测试bean的作用域-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--bean的作用域 使用scope属性可以配置bean的作用范围 单例(默认) or 多例-->
+    <bean class="com.study.pojo.scope" id="scope1" scope="singleton"/>
+    <bean class="com.study.pojo.scope" id="scope2" scope="prototype"/>
+
+</beans>
