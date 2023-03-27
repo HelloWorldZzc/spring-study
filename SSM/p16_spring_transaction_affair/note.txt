@@ -1,0 +1,96 @@
+在JdbcTemplate下的声明式事务
+介绍：
+    编程式事务：自己写代码实现功能
+    声明式事务：通过配置让框架实现功能
+区别&优缺点：
+    见文档
+
+项目背景：
+    完成一个购买图书的操作，使用三层架构实现，要求操作符合相关逻辑
+
+知识点：
+    在java中，默认一条语句就是一个事务，因此可能会出现 下单完成了，但是扣款失败的案例
+    因此，我们需要把下单--->扣款---->买书当成是一个事务，进行操作
+
+准备工作：
+    1、配置依赖
+    2、创建测试表 t_book t_user（数量，余额项设置为无符号，也就是说，这两项当他们是负数的时候将报错，符合逻辑）
+    3、配置spring-config.xml文件（扫描组件 配置数据源 配置jdbcTemplate）
+    4、设置好三层架构，并整理好业务逻辑
+    5、正常测试--->检查系统能否正常运行
+    6、在spring-config.xml文件中加入相关的配置（添加事务）
+    7、在server层添加事务注解(@Transactional)标识在方法上，只会影响该方法,标识的类上，会影响类中所有的方法
+事务属性：
+    1、只读@Transactional(readOnly = true)
+        对一个查询操作来说，如果我们把它设置成只读，就能够明确告诉数据库，这个操作不涉及写操作。这样数据库就能够针对查询操作来进行优化。
+
+    2、超时@Transactional(timeout = 3)
+        超过这个时间没有获取到数据，数据库将自动释放资源
+
+    3、回滚策略@Transactional(noRollbackFor = ArithmeticException.class)
+        rollbackFor属性：需要设置一个Class类型的对象  遇到XX异常回滚(了解 本来遇到异常就会回滚)
+        rollbackForClassName属性：需要设置一个字符串类型的全类名  遇到XX异常回滚(了解 本来遇到异常就会回滚)
+        noRollbackFor属性：需要设置一个Class类型的对象  遇到XX异常不回滚
+        rollbackFor属性：需要设置一个字符串类型的全类名  遇到XX异常不回滚
+
+    4、事务的隔离级别
+        @Transactional(isolation = Isolation.DEFAULT)//使用数据库默认的隔离级别
+        @Transactional(isolation = Isolation.READ_UNCOMMITTED)//读未提交
+        @Transactional(isolation = Isolation.READ_COMMITTED)//读已提交
+        @Transactional(isolation = Isolation.REPEATABLE_READ)//可重复读
+        @Transactional(isolation = Isolation.SERIALIZABLE)//串行化
+
+    5、事务的传播行为
+        介绍：当事务方法被另一个事务方法调用时，必须指定事务应该如何传播。
+        例如：方法可能继续在现有事务中运行，也可能开启一个新事务，并在自己的事务中运行。
+         Transactional(propagation = Propagation.REQUIRED)
+             默认情况，表示如果当前线程上有已经开启的事务可用，那么就在这个事务中运行。经过观察，购买图书的方法buyBook()在checkout()中被调
+             用，checkout()上有事务注解，因此在此事务中执行。所购买的两本图书的价格为80和50，而用户的余
+             额为100，因此在购买第二本图书时余额不足失败，导致整个checkout()回滚，即只要有一本书买不
+             了，就都买不了
+         Transactional(propagation = Propagation.REQUIRES_NEW)
+             表示不管当前线程上是否有已经开启的事务，都要开启新事务。
+             同样的场景，每次购买图书都是在buyBook()的事务中执行，因此第一本图书购买成功，事务结束，
+             第二本图书购买失败，只在第二次的buyBook()中回滚，购买第一本图书不受影响，即能买几本就买几本
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+附
+创建表的SQL语句
+CREATE TABLE `t_book` (
+`book_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+`book_name` varchar(20) DEFAULT NULL COMMENT '图书名称',
+`price` int(11) DEFAULT NULL COMMENT '价格',
+`stock` int(10) unsigned DEFAULT NULL COMMENT '库存（无符号）',
+PRIMARY KEY (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+insert into `t_book`(`book_id`,`book_name`,`price`,`stock`) values (1,'斗破苍
+穹',80,100),(2,'斗罗大陆',50,100);
+CREATE TABLE `t_user` (
+`user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+`username` varchar(20) DEFAULT NULL COMMENT '用户名',
+`balance` int(10) unsigned DEFAULT NULL COMMENT '余额（无符号）',
+PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+insert into `t_user`(`user_id`,`username`,`balance`) values (1,'admin',50);
+
+基于xml的事务
+    相关笔记：见文档
+    https://www.bilibili.com/video/BV1Ya411S7aT/?p=117

@@ -1,0 +1,12 @@
+(了解)-->声明式事务JdbcTemplate--->spring框架对jdbc进行封装，使用jdbcTemplate方便实现对数据库操作(后面基本都是mybatis)
+1、准备依赖
+2、创建pojo实体类对象
+3、创建spring-config配置文件(配置数据源，配置jdbcTemplate)
+4、创建test 进行操作
+
+新的注解
+@RunWith(SpringJUnit4ClassRunner.class) 表示在测试的环境中
+@ContextConfiguration("classpath:xxx.xml") 读取xml配置文件
+
+以此简单了解一下关于jdbcTemplate的用法
+demo demo2分别为使用注解/不使用注解读取数据库中的信息

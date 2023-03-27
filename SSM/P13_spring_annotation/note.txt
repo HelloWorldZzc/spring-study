@@ -1,0 +1,55 @@
+1、注解
+    给一些类加上以下注解，那么类就相当于xml中的bean，在操作的过程中可以更加方便
+        @Component：将类标识为普通组件
+        @Controller：将类标识为控制层组件
+        @Service：将类标识为业务层组件
+        @Repository：将类标识为持久层组件
+    PS：
+        1、@Controller、@Service、@Repository这三个注解只是在@Component注解的基础上起 了三个新的名字，本质上都是相同的，帮开发人员更好的观察
+        2、@@Component("newId") 默认的id为标注的对象，可以设置value值设置新的id
+2、扫描
+    加上了注解框架并不认识，所以要在xml配置文件中加入扫描文件
+    2-1最基础的情况
+        <context:component-scan base-package="com.xxx"/>
+    2-2在xxx包中，排除control包
+     context:exclude-filter标签：指定排除规则
+        type：设置排除或包含的依据
+        type="annotation"，根据注解排除，expression中设置要排除的注解的全类名
+        type="assignable"，根据类型排除，expression中设置要排除的类型的全类名
+
+    <context:component-scan base-package="com.xxx">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="assignable" expression="com.xxx.Controller"/>
+    </context:component-scan>
+
+    2-3 在XXX包中，只使用controller包
+        了解这样这种写法即可，基本不会使用，如果要只使用XXX包，那么直接用最基本的方式描述即可
+         context:include-filter标签：指定在原有扫描规则的基础上追加的规则 -->
+         use-default-filters属性：取值false表示关闭默认扫描规则(必须设置，默认为true，表示按照规则扫描所有类)
+         type：设置排除或包含的依据
+            type="annotation"，根据注解排除，expression中设置要排除的注解的全类名
+            type="assignable"，根据类型排除，expression中设置要排除的类型的全类名
+
+        <context:component-scan base-package="com.xxx" use-default-filters="false">
+            <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+            <context:include-filter type="assignable" expression="com.xxx.controller.UserController"/>-->
+        </context:component-scan>
+
+3、基于注解的自动装入
+    @Autowired注解
+        在成员变量(构造方法，set方法)上直接标记@Autowired注解即可完成自动装配，不需要提供setXxx()方法
+    装配过程：
+        1、默认通过byType的方式，在IOC容器中通过类型匹配某个bean为属性赋值
+        2、若有多个类型匹配的bean，此时会自动转换为byName的方式实现自动装配的效果
+        3、若byType和byName的方式都无妨实现自动装配，即IOC容器中有多个类型匹配的bean且这些bean的id和要赋值的属性的属性名都不一致，此时抛异常：NoUniqueBeanDefinitionException
+        4、在3的前提下，此时可以在要赋值的属性上，添加一个注解@Qualifier通过该注解的value属性值，指定某个bean的id，将这个bean为属性赋值
+
+    注意点：
+        若IOC容器中没有任何一个类型匹配的bean，此时抛出异常：NoSuchBeanDefinitionException
+        在@Autowired注解中有个属性required，默认值为true，要求必须完成自动装配，如果没有则抛出 NoSuchBeanDefinitionException
+        可以将required设置为false，此时能装配则装配，无法装配则使用属性的默认值，这时没有则抛出空指针异常
+
+
+4、aop前置--->动态代理--->计算器案例
+    案例描述：
+        计算器拥有加减乘除的方法，每次计算之后都会打印日志，把日志部分交给代理来完成(使用javaEE实现)

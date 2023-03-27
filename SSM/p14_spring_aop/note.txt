@@ -1,0 +1,94 @@
+1、AOP
+    1.1概念
+        是一种设计思想，是软件设计领域中的面向切面编程，它是面向对象编程的一种补充和完善，它以通过预编译方式和运行期动态代理方式实现在不修改源代码的情况下给程序动态统一添加额外功能的一种技术
+        OOP:纵向继承    AOP：横向抽取
+    1.2相关术语
+        横切关注点
+            从每个方法中抽取出来的同一类非核心业务。在同一个项目中，我们可以使用多个横切关注点对相关方法进行多个不同方面的增强。
+            （动态代理案例中，日志功能称为横切关注点）
+        通知
+            每一个横切关注点上要做的事情都需要写一个方法来实现，这样的方法就叫通知方法。
+            (动态代理案例中，日志功能在切面中，也成为通知)
+            前置通知：在被代理的目标方法前执行
+            返回通知：在被代理的目标方法成功结束后执行（寿终正寝）
+            异常通知：在被代理的目标方法异常结束后执行（死于非命）
+            后置通知：在被代理的目标方法最终结束后执行（盖棺定论）
+            环绕通知：使用try...catch...finally结构围绕整个被代理的目标方法，包括上面四种通知对应的所有位置
+        切面
+            封装通知方法的类（一个容器的作用）
+        目标
+            被代理的目标对象。
+        代理
+            向目标对象应用通知之后创建的代理对象。
+    1.3作用
+        简化代码：把方法中固定位置的重复的代码抽取出来，让被抽取的方法更专注于自己的核心功能，提高内聚性。
+        代码增强：把特定的功能封装到切面类中，看哪里有需要，就往上套，被套用了切面逻辑的方法就被切面给增强了
+
+2、基于注解的AOP
+    1、添加依赖
+    2、创建接口，实现类，logAspect对象（切面），xml配置文件（扫描与使用了aop的声明）
+    3、注解声明 （bean的声明与aop的声明）
+
+3、讲解
+    ------------------------------------四种通知---------------------------------------------
+    @Aspect  标记其为一个切面
+
+    "execution(public int com.xxx.CalculatorImpl.*(..))"
+        execution是固定写法
+        public int 表示修饰符
+        com.xxx.CalculatorImpl.*表示在哪里创建界面(.*表示所有方法)
+        (..)表示任意参数 要是写参数可以写成(int ,int)
+
+    @Before("execution(public int com.xxx.CalculatorImpl.*(..))") 指定此方法为前置通知
+    @After("execution(public int com.xxx.CalculatorImpl.*(..))") 指定此方法为后置通知
+
+    利用此标记可描述一个execution用于多处
+    @Pointcut("execution(public int com.study.aop_an.CalculatorPureImpl.*(..))")
+    public void demo_execution(){}
+
+
+    @AfterThrowing(value = "demo_execution()",throwing = "e") 指定此方法为异常通知 throwing表示返回异常的对象
+    @AfterReturning(value = "demo_execution()",returning = "result") 指定此方法为返回通知 returning表示返回的对象
+
+    以上所有的方法都有JoinPoint joinPoint对象，其中的一些参数隐藏其中
+    举例：
+        @AfterReturning(value = "demo_execution()",returning = "result")
+         public void returning(JoinPoint joinPoint,Object result){
+            String methodName = joinPoint.getSignature().getName();
+            System.out.println("Logger-->返回通知，方法名："+methodName+"，结果："+result);
+         }
+
+    ------------------------------------环绕通知-----------------------------------
+    @Around("execution(public int com.study.aop_an.CalculatorPureImpl.*(..))")
+    方法名要使用object（因为他是代理，需要返回值）
+
+        result = proceedingJoinPoint.proceed();就是我们正常执行的代码
+        我可以按照正常写代码的逻辑对其进行代理操作
+    举例：
+
+    public Object test_around(ProceedingJoinPoint proceedingJoinPoint){
+       try {
+            System.out.println("环绕通知--->目标对象方法执行之前");
+            result = proceedingJoinPoint.proceed();
+            System.out.println("环绕通知--->目标对象执行之后");
+       } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.out.println("环绕通知--->目标对象方法出现异常时");
+       }finally {
+             System.out.println("环绕通知--->目标对象执行完毕");
+            }
+            return result;
+        }
+
+4、aop的优先级
+    相同目标方法上同时存在多个切面时，切面的优先级控制切面的内外嵌套顺序。
+        优先级高的切面：外面
+        优先级低的切面：里面
+    使用@Order注解可以控制切面的优先级：
+        @Order(较小的数)：优先级高
+        @Order(较大的数)：优先级低
+    order有默认值，默认值是int的最大值
+
+5、使用xml的方式进行配置aop
+    使用的方法都是一样的，原理也是相同的，xml只是注解的另外一种表现形式而已
+    <aop:config>中进行配置的设置
