@@ -1,0 +1,92 @@
+@RequestMapping注解
+    作用：就是将请求和处理请求的控制器方法关联起来，建立映射关系。SpringMVC 接收到指定的请求，就会来找到在映射关系中对应的控制器方法来处理这个请求。
+
+本案例是对requestMapping注解的扩展
+(由于没有使用到test操作因此删除)
+
+1、@RequestMapping注解的位置
+    @RequestMapping标识一个类：设置映射请求的请求路径的初始信息
+    @RequestMapping标识一个方法：设置映射请求请求路径的具体信息(如果初始信息为空直接用，如果存在初始信息需要加上初始信息)
+
+2、@RequestMapping注解的value属性
+    当没有其他的属性时，value属性可以不写
+    属性是一个字符串类型的数组，表示该请求映射能够匹配多个请求地址所对应的请求
+    举例：
+        @RequestMapping(value = {"/hello","/test"})--->表示/hello或/test均由此访问
+
+3、@RequestMapping注解的method属性
+    method属性是一个RequestMethod类型的数组，表示该请求映射能够匹配多种请求方式的请求
+    举例：
+        @RequestMapping(value = "/get",method = {RequestMethod.GET})--->表示必须是get请求才能匹配
+
+    扩展：派生注解
+        处理get请求的映射-->@GetMapping
+        处理post请求的映射-->@PostMapping
+        处理put请求的映射-->@PutMapping
+        处理delete请求的映射-->@DeleteMapping
+        举例：
+             @PostMapping("/post")--->此时方法是绑定了post请求
+
+4、@RequestMapping注解的params属性（了解）
+    所传入的参数必须符合一些规则才能匹配
+    "param"：要求请求映射所匹配的请求必须携带param请求参数
+    "!param"：要求请求映射所匹配的请求必须不能携带param请求参数
+    "param=value"：要求请求映射所匹配的请求必须携带param请求参数且param=value
+    "param!=value"：要求请求映射所匹配的请求必须携带param请求参数但是param!=value
+
+    扩展点：THYMELEAF中携带参数的方式如下：<a th:href="@{/params(username=admin)}">
+
+    报错提醒：
+        若当前请求满足@RequestMapping注解的value和method属性，但是不满足params属性，此时页面回报错400：
+        Parameter conditions "username, password!=123456" not met for actual
+        request parameters: username={admin}, password={123456}
+
+5、@RequestMapping注解的headers属性（了解）
+    请求头信息必须符合规则才能传递（与params属性基本相同）
+
+    报错提醒：
+        若当前请求满足@RequestMapping注解的value和method属性，但是不满足headers属性，此时页面显示404错误，即资源未找到
+    TIP:Referer值得是从哪个路径过来的(路由的上一跳)
+
+6、SpringMVC支持ant风格的路径
+    ？：表示任意的单个字符
+    *：表示任意的0个或多个字符
+    **：表示任意层数的任意目录
+    注意：在使用**时，只能使用/**/xxx的方式
+
+    举例：@RequestMapping("/a?a") 表示能匹配开头为a结尾是a，中间为除?外的任何字符
+
+7、SpringMVC支持路径中的占位符（重点）
+    如果路径中存在一些参数，可以使用占位符，使用方式如下：@RequestMapping("user/{type}/{id}")
+    其中 type id表示待传入的参数，可以使用@PathVariable("xxx")标识符指定xxx的值
+    举例：
+        @RequestMapping("user/{type}")
+        public void add(@PathVariable("type") String type){
+                System.out.println("此方法收到的id:"+id+"操作类型为："+type);
+            }
+
+
+==================================================================================================
+SpringMVC获取请求参数的一些方式
+1、使用最基础的HttpServletRequest的方式获取请求
+    String name=request.getParameter("name");
+
+2、使用控制器方法的形参获取请求参数
+    public String controller(String name,String pwd) //传入的参数需要与其名相同
+
+3、通过注解@requestParam获取
+    标注在形参旁边，可以指定改形参的获取值，还有一些其他的参数可供选择
+    value：指定为形参赋值的请求参数的参数名
+    required：设置是否必须传输此请求参数，默认值为true
+    defaultValue：不管required属性值为true或false，当value所指定的请求参数没有传输或传输的值为""时，则使用默认值为形参赋值
+
+    补充：required设置注意点：
+        若设置为true时，则当前请求必须传输value所指定的请求参数，若没有传输该请求参数，且没有设置defaultValue属性，则页面报错400：Required String parameter 'xxx' is not present；
+        若设置为false，则当前请求不是必须传输value所指定的请求参数，若没有传输，则注解所标识的形参的值为null
+        当有defaultValue之后，required属性无效
+
+4、注解@RequestHeader @CookieValue
+    与注解@requestParam相同，也具有相同的属性
+
+5、解决乱码问题(实测未解决乱码问题)
+    可以使用SpringMVC提供的编码过滤器CharacterEncodingFilter，但是必须在web.xml中进行注册
