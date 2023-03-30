@@ -1,0 +1,77 @@
+REST简介：
+    Representational State Transfer，表现层资源状态转移。
+    REST 风格提倡 URL 地址使用统一的风格设计，从前到后各个单词使用斜杠分开，不使用问号键值对方式携带请求参数，而是将要发送给服务器的数据作为 URL 地址的一部分，以保证整体风格的一致性。
+
+REST具体风格：
+    查询操作
+        传统方式：getUserById?id=1
+        REST风格：user/1-->get请求方式
+    保存操作
+        传统方式：saveUser
+        REST风格：user-->post请求方式
+    删除操作
+        传统方式：deleteUser?id=1
+        REST风格：user/1-->delete请求方式
+    更新操作
+        传统方式：updateUser
+        REST风格：user-->put请求方式
+
+前置知识-如何发送put/delete请求(不借助第三方工具)
+    SpringMVC 提供了 HiddenHttpMethodFilter 帮助我们将 POST 请求转换为 DELETE 或 PUT 请求HiddenHttpMethodFilter 处理put和delete请求的条件：
+    a>当前请求的请求方式必须为post
+    b>当前请求必须传输请求参数_method
+
+实操：
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <form th:action="@{/xxx}" method="post">
+        <input type="hidden" name="_method" value="put/delete">
+        <input type="submit" value="xxx">
+    </form>
+
+=====================================================================================
+案例一：
+    按照REST风格 模拟完成一个增删改查的案例，同时也要在index.html界面中展示相关的选项
+
+=====================================================================================
+案例二：
+    按照REST风格 完成一个增删改查用户信息的界面，页面要进行交互
+
+功能：
+    访问首页(/   post)
+    查询全部数据(/employee get)
+    删除(/employee/2  delete)
+    跳转到添加数据页面(/toAdd  get)
+    执行保存(/employee post)
+    跳转到更新数据页面(/employee/2  get)
+    执行更新(/employee  put)
+
+案例过程：
+    1、创建Javabean --->创建实体类对象---->employee
+    2、模拟数据库操作 ---->模拟简化操作---->employeeDao.java(同时里面也有一些方法)
+    3、转到员工列表---->index界面超链接跳转
+    4、emp_list界面整理
+        4-1 导出所有数据 (调用查询all方法，使用thymeleaf方法导入)
+        4-2 导入静态文件 (需要在springMVC.xml中添加配置 <mvc:default-servlet-handler/>)
+        4-3 整理好文件
+    5、添加功能
+        5-1 在emp_list中添加to/add方法(跳转到emp_add.html)
+        5-2 完成emp_add.html的表单创建
+        5-3 控制层完成 employee的post
+    6、修改功能
+        6-1 在emp_list中添加update方法 <a th:href="@{'/employee/'+${employee.id}}">update</a>
+        6-2 控制层
+            1-由id获取员工信息，并跳转到员工修改表
+            2-建立员工修改表表单(put方法)
+            3-修改完成后保存
+    7、删除功能
+        7-1 在emp_list中添加相关的方法
+            用js发送请求
+            在controller层 做好相关的处理

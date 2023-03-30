@@ -1,0 +1,38 @@
+域对象共享数据
+在TestScopeController中，展示了以下的使用
+1、使用ServletAPI向request域对象共享数据
+2、使用ModelAndView向request域对象共享数据
+3、使用Model向request域对象共享数据
+4、使用map向request域对象共享数据
+5、使用ModelMap向request域对象共享数据
+
+Q1 Model、ModelMap、Map的关系
+    Model、ModelMap、Map类型的参数其实本质上都是 BindingAwareModelMap 类型的
+    虽然看起来实现的方式不同 但是底层的逻辑还是一样的
+
+Q2 向session域共享数据与向application域共享数据
+    虽然springMVC自带相关方法，但是还是使用原始的方法最简单
+
+Q3 thymeleaf读取数据
+    <p th:text="${testScope}"></p>  scope共享数据读取
+    <p th:text="${session.testSession}"></p> session共享数据读取
+    <p th:text="${application.testApplication}"></p> application共享数据读取
+
+===========================================
+转发与重定向
+    转发：
+
+        在thymeleaf框架中，转发直接使用return"xxx"即可完成，如果使用return"forward:xxx"这样转发的界面不会被框架所解析
+        当然可以转发到一个界面，那个界面在被框架解析，那这样有有点多此一举了，还不如用原始的return xxx
+    重定向：
+        return "redirect:/xxx";
+        重定向是转到一个新的界面，上面的域名会发生改变
+    使用：
+        一般情况下，业务逻辑失败用转发，业务逻辑成功用重定向
+
+=============================================
+视图控制器
+    当控制器方法中，仅仅用来实现页面跳转，即只需要设置视图名称时，可以将处理器方法使用view-controller标签进行表示
+    但是，需要在前面加上开启mvc的注解驱动<mvc:annotation-driven />，不然他只能返回视图控制器中的内容，不会返回其他内容
+
+

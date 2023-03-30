@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>index</title>
+</head>
+<body>
+<h1>index</h1>
+<br/>
+<a th:href="@{/user}">查询所有的用户信息</a>
+<a th:href="@{/user/1}">查询用户id为1的信息</a>
+<form th:action="@{/user}" method="post">
+    <input value="添加用户信息" type="submit">
+</form>
+<form th:action="@{/user}" method="post">
+    <input type="hidden" name="_method" value="put">
+    <input type="submit" value="修改用户信息">
+</form>
+<form th:action="@{/user/2}" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="删除用户id为2的信息">
+</form>
+
+<br/>
+<br/>
+<h3>下面是案例展示</h3>
+<a th:href="@{/employee}">跳转到案例界面employee--->查询所有用户信息</a>
+</body>
+</html>

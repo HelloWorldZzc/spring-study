@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>用户信息</title>
+    <link rel="stylesheet" th:href="@{/static/css/index_work.css}">
+</head>
+<body>
+<div id="app">
+    <table>
+        <tr>
+            <th colspan="5">employee list</th>
+        </tr>
+        <tr>
+            <th>id</th>
+            <th>lastName</th>
+            <th>email</th>
+            <th>gender</th>
+            <th>options（<a th:href="@{/to/add}">add</a>）</th>
+        </tr>
+        <tr th:each="employee : ${emp_list}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.lastName}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${employee.gender}"></td>
+            <td>
+                <a @click="deleteEmp" th:href="@{'/employee/'+${employee.id}}">delete</a>
+                <a th:href="@{'/employee/'+${employee.id}}">update</a>
+            </td>
+        </tr>
+    </table>
+    <form method="post" ref="form">
+        <input type="hidden" name="_method" value="delete">
+    </form>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/static/js/vue.js}"></script>
+<script type="text/javascript">
+    var vue = new Vue({
+        methods:{
+            deleteEmp(e){
+                //获取表单元素
+                let form = this.$refs.form;
+                //获取href 路径
+                let href = e.target.href;
+                //给表单指定路径
+                form.action=href;
+                //提交表单
+                form.submit();
+                e.preventDefault();
+            }
+        }
+    });
+    vue.$mount("#app");
+</script>
+</html>
