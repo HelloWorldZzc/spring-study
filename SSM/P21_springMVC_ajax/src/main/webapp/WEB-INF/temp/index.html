@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>首页</title>
+</head>
+<body>
+<div id="app">
+   <h1>index.html</h1>
+    <button @click="demo_testAjax">测试SpringMVC处理ajax</button>
+    <button @click="demo_param">测试SpringMVC处理ajax-带参数</button>
+    <button @click="getParamByMap">获取ajax参数-map方式</button>
+    <button @click="getParamByBean">获取ajax参数-实体类方式</button>
+    <button @click="demo_response">测试@ResponseBody注解响应浏览器数据</button>
+    <button @click="getResponseJson">测试@ResponseBodyz注解相应JSON数据格式</button>
+    <hr/>
+    <a th:href="@{/testDown}">文件下载</a>
+    <form th:action="@{/testUp}" method="post" enctype="multipart/form-data">
+        <input type="file" name="user_up" value="上传文件">
+        <button type="submit">确定提交</button>
+    </form>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/static/js/vue.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/axios.min.js}"></script>
+<script>
+    const vue=new Vue({
+        methods:{
+            demo_testAjax(){
+                axios.post("/temp/testAjax?id=1001").then(res=>{
+                    console.log(res.data)
+                })
+            },
+            demo_param(){
+                axios.post("/temp/testParam",{username:"zs",pwd:"1234"}).then(res=>{
+                    console.log(res.data)
+                })
+            },
+            getParamByMap(){
+                axios.post("/temp/getParamByMap",{username:"zs",pwd:"1234"}).then(res=>{
+                    console.log(res.data)
+                })
+            },
+            getParamByBean(){
+                axios.post("/temp/getParamByBean",{username:"zs",pwd:"1234"}).then(res=>{
+                    console.log(res.data)
+                })
+            },
+            demo_response(){
+                axios.get("/temp/responseTest").then(res=>{
+                    console.log(res.data)
+                })
+            },
+            getResponseJson(){
+                axios.get("/temp/getResponseJson").then(res=>{
+                    console.log("实体类与map：",res.data)
+                })
+                axios.post("/temp/getResponseJson").then(res=>{
+                    console.log("list：",res.data)
+                })
+            }
+        }
+    })
+    vue.$mount("#app");
+</script>
+</html>

@@ -1,0 +1,50 @@
+关于spring_mvc中的一些扩展知识：
+1、拦截器
+    拦截器与过滤器的区别：
+        拦截器用于拦截用户请求并进行相应的处理；浏览器向服务器发送请求时候使用过滤器进行过滤
+    拦截器的配置：
+            1-控制器中实现接口HandlerInterceptor(注意，首先他得被IOC所管理)
+            2-实现方法
+            3-在springMVC文件中进行配置(多种配置方法)
+    拦截器的三个抽象方法：
+        preHandle：控制器方法执行之前执行preHandle()，其boolean类型的返回值表示是否拦截或放行，返回true为放行，即调用控制器方法；返回false表示拦截，即不调用控制器方法
+        postHandle：控制器方法执行之后执行postHandle()
+        afterCompletion：处理完视图和模型数据，渲染视图完毕之后执行afterCompletion()
+
+2、多个拦截器的执行顺序
+    若每个拦截器的preHandle()都返回true
+        此时多个拦截器的执行顺序和拦截器在SpringMVC的配置文件的配置顺序有关：
+        preHandle()会按照配置的顺序执行，而postHandle()和afterCompletion()会按照配置的反序执行(洋葱模型)
+
+    若某个拦截器的preHandle()返回了false
+        preHandle()返回false和它之前的拦截器的preHandle()都会执行
+        postHandle()都不执行
+        返回false的拦截器之前的拦截器的afterCompletion()会执行
+
+===============================================================================================
+异常处理器
+    SpringMVC提供了一个处理控制器方法执行过程中所出现的异常的接口：HandlerExceptionResolver,
+    SpringMVC提供了自定义的异常处理器SimpleMappingExceptionResolver
+
+xml配置与理解
+    <property name="exceptionMappings">
+          <props>
+               <!--键表示执行的时候的异常，值表示跳转到的某些界面-->
+               <prop key="java.lang.ArithmeticException">error</prop>
+          </props>
+    </property>
+    在遇到数学运算异常的时候，会跳转到error界面
+
+    <property name="exceptionAttribute" value="ex_info"/>
+    共享区域 使用<p th:text="${ex_info}"></p>可读取
+
+
+2-注解配置
+@ControllerAdvice---->指定这个类是异常处理器
+public class exceptionController {
+    @ExceptionHandler(ArithmeticException.class)---->表明异常类
+    public String test(Exception ex,Model model){
+        model.addAttribute("ex_info",ex);---->手动把信息加入共享域
+        return "error";---->跳转到的界面(可参考modelAndView)
+    }
+}

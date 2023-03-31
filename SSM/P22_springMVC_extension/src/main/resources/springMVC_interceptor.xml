@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+   <context:component-scan base-package="com.study"/>
+
+   <bean id="viewResolver"
+         class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+      <property name="order" value="1"/>
+      <property name="characterEncoding" value="UTF-8"/>
+      <property name="templateEngine">
+         <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+            <property name="templateResolver">
+               <bean
+                       class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+                  <!-- 视图前缀 -->
+                  <property name="prefix" value="/WEB-INF/temp/"/>
+                  <!-- 视图后缀 -->
+                  <property name="suffix" value=".html"/>
+                  <property name="templateMode" value="HTML5"/>
+                  <property name="characterEncoding" value="UTF-8" />
+               </bean>
+            </property>
+         </bean>
+      </property>
+   </bean>
+
+   <mvc:annotation-driven/>
+   <mvc:view-controller path="/" view-name="index"/>
+
+   <!--配置拦截器 使用传统的bean or ref的方式进行配置 简易版-->
+   <bean id="first-interceptors" class="com.study.interceptor.first"/>
+   <bean id="second-interceptors" class="com.study.interceptor.second"/>
+   <bean id="third-interceptors" class="com.study.interceptor.third"/>
+
+<!--   <mvc:interceptors>-->
+<!--      <ref bean="first-interceptors"/>-->
+<!--      <bean class="com.study.interceptor.second"/>-->
+<!--   </mvc:interceptors>-->
+
+
+   <!--拦截器的配置 详细版 指出interceptor 对不同的路径配置不同的拦截器，简易版默认给所有匹配-->
+   <mvc:interceptors>
+       <mvc:interceptor>
+           <!--配置需要拦截的请求的请求路径，/**表示所有请求-->
+           <mvc:mapping path="/**"/>
+           <!--配置需要排除拦截的请求的请求路径-->
+           <mvc:exclude-mapping path="/abc"/>
+           <!--配置拦截器(ref与bean格式任选其一)-->
+            <bean class="com.study.interceptor.first"/>
+       </mvc:interceptor>
+      <mvc:interceptor>
+         <!--配置需要拦截的请求的请求路径，/**表示所有请求-->
+         <mvc:mapping path="/**"/>
+         <!--配置需要排除拦截的请求的请求路径-->
+         <mvc:exclude-mapping path="/abc"/>
+         <!--配置拦截器(ref与bean格式任选其一)-->
+         <bean class="com.study.interceptor.second"/>
+      </mvc:interceptor>
+      <mvc:interceptor>
+         <!--配置需要拦截的请求的请求路径，/**表示所有请求-->
+         <mvc:mapping path="/**"/>
+         <!--配置需要排除拦截的请求的请求路径-->
+         <mvc:exclude-mapping path="/abc"/>
+         <!--配置拦截器(ref与bean格式任选其一)-->
+         <bean class="com.study.interceptor.third"/>
+      </mvc:interceptor>
+   </mvc:interceptors>
+
+</beans>

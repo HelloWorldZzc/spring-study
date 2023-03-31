@@ -1,0 +1,36 @@
+整理关于springMVC从hello到extension中的知识点，使用配置类的方式进行配置
+原理
+
+项目构建&结构
+    1、按照之前的方式，初始化项目结构，删除web.xml
+    2、创建控制层映射，拦截器备用
+    3、创建configInit(主配置类，继承xxx并实现方法) springConfig(spring配置文件) springMVCConfig(springMVC的配置文件)
+       注：configInit继承了xxx，其他的配置文件要加上@Configuration注解表明
+
+web.xml中的配置
+    1、编码过滤器-------->configInit中创建编码过滤器
+    2、DispatcherServlet前端控制前指定配置文件----->configInit中指定返回class
+    3、servlet-mapping---->configInit中指定返回
+
+(springMVC.xml中配置)springMVCConfig类
+    1、文件扫描bean------>使用注解@ComponentScan("com.study.xxx")
+    2、开启MVC注解驱动----->使用注解@EnableWebMvc
+    3、servlet动态处理----->重写configureDefaultServletHandling
+    4、配置异常解析器------>重写configureHandlerExceptionResolvers
+    5、创建视图控制器------->重写addViewControllers
+    6、配置拦截器----->重写addInterceptors
+    7、配置文件是上传类----->添加bean并返回
+    8、配置视图解析器---->存在固定格式
+
+
+====================================================================================
+在springMVC中的注解(首字母都要大写)&整理
+@autowired 自动装配
+@controller 标注其为一个控制器
+@requestMapping("/xxx")  如果路径满足，自动匹配到相应的控制器
+@pathVariable("") 在变量前标注，表示url路径中的相关参数名
+@requestParam @requestHeader @cookieValue 添加在变量前，获取路径参数并赋值
+@controllerAdvice 表明此类是异常处理器
+@exceptionHandler 标注在class上，表明异常类型
+@RequestBody可以获取请求体信息，使用@RequestBody注解标识控制器方法的形参，当前请求的请求体就会为当前注解所标识的形参赋值
+@ResponseBody用于标识一个控制器方法，可以将该方法的返回值直接作为响应报文的响应体响应到浏览器（ajax部分）
