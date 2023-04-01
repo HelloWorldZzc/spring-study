@@ -1,0 +1,15 @@
+关于SSM框架整合的前置内容---ContextLoaderListener
+    Spring提供了监听器ContextLoaderListener，实现ServletContextListener接口，可监听ServletContext的状态
+
+此案例中，控制层的组件交给springMVC进行管理，服务层的组件交给spring进行管理
+若项目能成功启动运行，则表示正常前置配置正常，能进行整合操作
+
+项目过程
+    1、创建P17_springMVC_hello的案例
+    2、创建spring.xml文件，专门用于管理server
+    3、在web.xml中，在之前的基础上加上listener，在服务器启动时候加载spring的配置文件
+    4、创建controller，server（简单声明即可）
+
+检验：
+    项目能正常运行不报错即demo成功--->>验证了listener加载spring配置文件并能生效
+    （在controller中装配了server，但是server是交给spring管理的，在springMVC中能使用即说明装配成功）

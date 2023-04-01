@@ -1,0 +1,14 @@
+本项目介绍SMM框架整合及小demo案例
+
+demo过程：
+    1、导入maven依赖(很多依赖)
+    2、创建数据表(mybatis->t_emp)
+    3、导入web.xml
+    4、创建资源 log4j.xml，jdbc.properties
+    5、创建java文件夹
+    6、配置springMVC.xml，spring.xml,mybatis文件
+    7、填充java文件(pojo--->mapper--->service--->controller)
+    8、创建静态资源，注意model中传入的数据，避免报错
+
+===========================================================================
+于此 SSM框架的学习圆满完成
