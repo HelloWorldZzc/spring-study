@@ -1,0 +1,64 @@
+mybatis-Plus简介：
+    是一个 MyBatis的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
+特性：
+    无侵入
+    损耗小
+    强大的crud操作....
+官方地址: http://mp.baomidou.com
+
+=====================在springboot2的创建实例=========================
+TIP：同样可以创建SSM的项目，只不过使用springboot更加简单，但最后的操作都是相同的
+
+1、创建springboot项目(新建-->选择Spring Initializr--->配置下载)
+2、引入相关的依赖(lombok需要安装插件才能使用，默认已捆绑)
+3、配置类--->application.yml的配置
+4、添加实体类(pojo.user)
+5、创建mapper(添加之前需要在main中添加@MapperScan("XXX"))
+6、添加测试类(springboot的测试类需要添加相关格式)
+7、添加日志功能(确保能正常的输出SQL语句)
+
+=====扩展=====
+BaseMapper中的一些操作的使用---->demoTest中的实例
+自定义mapper:
+    按照之前的mybatis方式，在resources/mapper/userMapper.xml插入相关SQL语句，也要在接口mapper中声明
+
+
+=====service接口======
+与持久层提供baseMapper相同，在service层也提供了写好的接口
+1、创建service接口 extends IService<user>
+2、创建实现类 extends ServiceImpl<mapper类, 实体类> implements service接口
+3、可以在test类中调用预制方法，更加简化的完成开发(Test.serviceTest)
+
+=====常用注解=====
+1、@TableName：默认情况下指定的表为实体类名，使用此注解在实体类中，标识实体类对应的表
+2、@TableId：默认情况下id为数据库中的主键，使用此注解value属性指定XX为数据库中的主键，type属性指定主键的生成方式(默认雪花算法)
+3、@TableField：默认情况下字段与数据库中的名字一一对应，使用注解value属性指定该字段为数据库中的XX
+4、@TableLogic：逻辑删除（参考网址：https://baomidou.com/pages/6b03c5/）
+    默认情况下，使用删除语句，是真正的从数据库中删除
+    但如果加入了此字段后，变为逻辑删除(例如数据库中0表示未被删除，1表示被删除)
+    从此删除操作自动变为更新操作(逻辑删除0,1修改)
+    查找操作自动加上 逻辑视图的值=0 这个条件
+
+
+=====条件构造器Wrapper====
+AbstractWrapper:用于查询条件封装，生成SQL的where条件
+    QueryWrapper:查询条件封装
+    UpdateWrapper:update条件封装
+    AbstractLambdaWrapper:使用lambda语法
+        LambdaQueryWrapper:使用lambda语法使用的查询wrapper
+        LambdaUpdateWrapper:lambda更新封装wrapper
+
+案例介绍：wrapperTest(其中column栏均指数据库所对应的栏)
+
+========Tip=======
+一些常用的配置
+    mybatis-plus:
+        configuration:
+        # 配置MyBatis日志
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    global-config:
+        db-config:
+            # 配置MyBatis-Plus操作表的默认前缀
+            table-prefix: t_
+            # 配置MyBatis-Plus的主键策略
+            id-type: auto

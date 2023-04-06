@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--这个xml文件与哪个mapper所对应？这里一个表明-->
+<mapper namespace="com.example.p26_mybatisplus.mapper.userMapper">
+    <select id="selectMapById" resultType="map">
+        select * from user_mybatis_plus where id=#{id}
+    </select>
+</mapper>
