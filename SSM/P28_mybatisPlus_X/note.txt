@@ -1,0 +1,24 @@
+MyBatisX插件--->快速生成CURD的工具
+快速生成框架模板--->
+    1、安装mybatisX插件
+    2、连接数据库 (idea自带的数据库)
+    3、选择要快速生成的表 右键mybatisX-Generator
+    4、注意配置mapperScan     ---->配置完成后快速生成项目结构
+
+快速生成CURD
+    在mapper处输入相关的操作(例如insert update 变量名能很直白的明白其中意思...，需要有小蓝鸟的标志)(如果有其他的需求可以添加and)
+    点击Alt+enter选择 【generate Mybatis sql】自动生成xml的SQL语句
+
+    注意：
+        安装了插件，如果mapper上有方法名在xml中没有的话会报错
+
+插件功能
+    1、有关联的mapper旁边图标变为小蓝鸟，点击之后自动跳转到相关的界面
+    2、自动生成模板的框架
+    3、快速生成curd
+
+插件网址：https://baomidou.com/pages/ba5b24/#%E5%8A%9F%E8%83%BD
+
+==end==
+
+
