@@ -1,0 +1,27 @@
+# 关闭banner输出
+spring:
+  main:
+    banner-mode: off
+
+# 定义一些基础配置，让后续程序调用 （如果想表示转义字符，那么需要加上引号，那么遇上\x 自动表示转义字符）
+baseURL: "localhost:"
+
+post: ${baseURL}3306
+
+# 模拟基础数据，用于读取用
+this:
+  name: zzc
+  age: 20
+
+# 数组的方式 模拟兴趣爱好
+likes: [ eat, sleep, do]
+
+# 数组里面包含对象的方式
+user: [{name: zs,age: 4},{name: ls,age: 5}]
+
+# sql 用于展示数据
+datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/ssm_db?serverTimezone=UTC
+  username: root
+  password: root

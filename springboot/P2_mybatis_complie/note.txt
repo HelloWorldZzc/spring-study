@@ -1,0 +1,107 @@
+=====整合Junit测试类====
+创建springboot的项目是，已经帮我们自动创建好，maven的坐标为：
+    <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+    </dependency>
+
+使用：
+    在Test中创建相关项目，使用@SpringBootTest标注即可
+
+注意点:
+    如果测试类存在引导类中的包(子包)中,@SpringBootTest不需要指定
+
+    反之,如果不指定，会因为找不到对应的配置类而报错。
+
+注意点原理简介：
+    springboot始终是一个spring项目，需要把他加入spring的容器中才能使用
+    @SpringBootTest需要的class，若没事指定，会默认为在当前目录下，当前目录下是不行的
+
+    为什么不行：
+        需要@SpringBootConfiguration注解，只有在启动类注解类才有
+        或者，也能自己指定
+
+=====整合mybatis======
+创建springboot项目，需要指定数据源和框架，指定后会生成maven坐标
+
+配置：
+    默认配置springboot已经帮我们配置好了，我们只需要配置数据库即可
+
+其他使用：
+    与mybatis在ssm框架中的使用完全相同
+    可使用注解/XML进行相关的开发
+
+======整合其他框架======
+与整合mybatis框架大差不大，都是一样的操作
+PS:
+    但是如果spring官方没有整合相关的框架，那么maven的坐标需要自己导入
+    步骤：
+         导入对应的starter（与springboot整合的框架名字一般均为：XX-spring-boot-starter）
+         根据提供的配置格式，配置非默认值对应的配置项
+
+附1：mybatis-plus的部分pom.xml文件
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+附2：druid数据源的部分pom.xml文件
+   <dependencies>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>

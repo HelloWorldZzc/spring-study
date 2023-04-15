@@ -1,0 +1,54 @@
+1、快速搭建springboot的项目：
+    搭建过程：新建--->项目--->spring Initializr--->选择相关信息与其他框架--->搭建完成
+    搭建原理：实质上是帮助用户访问https://start.spring.io/
+    更改地址：在spring initializer中选定其他的地址，常见的有阿里镜像：https://start.aliyun.com/
+
+2、隐藏springboot中创建过多的文件:
+    springboot的创建会创建很多文件，如果 一些文件不想看见可以使用idea自带工具进行隐藏
+    具体操作为：setting-->file types--->ignored files and folders 进行添加即可
+
+3、入门案例解析--parent
+    在pom.xml文件中，我们可以看出版本管理只指定了 <parent> <version>2.6.3</version> </parent> 但确能确定所有的版本，而且不会存在版本冲突问题
+    原因：springboot程序需要继承spring-boot-starter-parent，其中继承了若干个依赖管理，并已经指定了依赖
+    (Ctrl+spring-boot-starter-parent--->Ctrl+spring-boot-dependencies 中可查看)
+
+4、入门案例解析--starter
+    SpringBoot中常见项目名称，定义了当前项目使用的所有依赖坐标，以达到减少依赖配置的目的(与parent结合)
+
+5、入门案例解析--引导类
+    在@SpringBootApplication下，启动main函数即可，本质上也是一个bean，我们可以创建一个简单的bean实验一下
+    (具体操作见启动文件)
+
+6、入门案例解析--内置Tomcat
+    在我们设置web项目的时候，就默认启动Tomcat服务，端口默认为8080。因为在starter中帮我们配置了
+    (Ctrl+spring-boot-starter-web 点击可查看)
+    如果我们不想使用，那就是maven中的排除选项，排除并选择自己的即可
+
+=====================================================================================================
+springboot的基础配置
+    （更多的配置前往：https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties）查询
+    （下面展示一些基础的配置）
+    1、修改服务器端口 server.port=xxx
+    2、关闭运行窗口的图标：spring.main.banner-mode=off
+    3、设置日志相关信息 logging.level.root=debug
+
+配置文件类型：
+    (优先级排序)
+    application.properties > application.yml(常用) > application.yaml
+    三个配置文件能同时存在，针对相同配置项中存在不同文件的配置，优先级高的会覆盖优先级低的
+
+(配置文件不能展示提醒解决)：
+    项目配置--->facet--->选择指定的项目--->在configuration中进行配置指定指定文件即可
+
+yaml语法规则：
+    (具体操作可见 application.yml文件)
+     大小写敏感
+     属性层级关系使用多行描述，每行结尾使用冒号结束
+     使用缩进表示层级关系，同层级左侧对齐，只允许使用空格（使用idea自动处理）
+     属性值前面添加空格（属性名与属性值之间使用冒号+空格作为分隔）
+     # 表示注释
+
+yaml配置需要在程序内读取（见userController、pojo.sql）：
+    1、使用@Value() 单独标记
+    2、使用Environment 获取所有
+    3、使用实体类(名称要相同)自动进行转换
