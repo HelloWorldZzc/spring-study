@@ -1,0 +1,69 @@
+本item介绍多环境开发 与 简单日志相关功能
+=====多环境开发=====
+一般而言，存在开发环境()、测试环境()、生产环境()。若来回切换比较复杂，可以在配置文件中进行配置好
+
+1、yml 设置多环境
+    1-1：整合在同一个文件夹中( yml/applicationAll.yml )
+        使用---分割不同的环境
+    1-2：存储在不同的文件夹中( yml除了1-1外其他 )
+        主文件夹application.yml 其他环境application-xxx 引入时直接引入xxx
+
+2、Properties设置多环境
+    只能在不同的文件夹中，不能整合。与1-2相似 (prop文件夹)
+
+3、多环境开发独立配置文件的书写
+    根据功能对配置文件中的信息进行拆分，并制作成独立的配置文件（yml-more文件夹中）
+
+4、maven配置环境：
+    当maven与springboot同时配置时，以maven的为主(springboot要在maven环境执行)
+
+
+附：maven的环境配置
+<!--设置多环境-->
+    <profiles>
+        <profile>
+            <id>env_dev</id>
+            <properties>
+                <profile.active>dev</profile.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>env_pro</id>
+            <properties>
+                <profile.active>pro</profile.active>
+            </properties>
+        </profile>
+    </profiles>
+<!--在springboot中引用maven属性-->
+spring:
+    profiles:
+        active:@profile.active@
+
+======日志======
+    日志的级别共6种，通常使用4种即可，分别是DEBUG，INFO,WARN,ERROR
+1、基本使用
+    于javaSE课程中的日志课程大同小异，导入日志文件，使用log.info("xxx")功能进行
+2、简单使用
+    几乎在每个类中都要导入，那么为了更加方便，使用lombok提供的注解@Slf4j简化开发(相当于导入日志文件)
+3、设置日志输出级别(见 application.yml)
+    1、全局开启
+    2、分组/文件开启
+
+4、日志输出格式
+    默认情况下日志输出的格式如下：
+        发生事件
+        级别
+        PID（进程ID）
+        所属线程
+        类名/接口名(默认名称有上限，当名称过长时，会简化成首字母，甚至删除)
+        日志信息
+5、设置日志输出格式
+    在配置文件：logging.pattern.console中设置日志输出格式
+    （不过一般不会去更改，都存在默认值）
+
+6、日志输出文件
+    目前日志都是输出在控制台中，可在配置文件中logging.file.name="xxx"中设置日志以文件形式输出
+    同时，还能存在一些复杂的属性配置，具体可参考配置文件中

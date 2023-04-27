@@ -1,0 +1,4 @@
+# 主配置文件，在-dev -test -pro中指定(后缀决定名字)
+spring:
+  profiles:
+    active: pro

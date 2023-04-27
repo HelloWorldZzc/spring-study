@@ -1,0 +1,56 @@
+有了SSM框架与前置的基础之后，基本上能使用springboot框架开发一个小的项目
+使用springboot+MP 做一个简单的增删改查demo案例
+
+1、更新pom.xml文件
+2、实体类开发 pojo.book
+3、创建bookMapper(继承baseMapper)
+4、MP分页插件的添加与使用
+5、完成服务层(完成：增加、修改、删除、查找全部、按条件查询功能)
+6、完成控制层(基于服务层的业务，完成控制层的操作)
+7、确保后端代码能正常使用，使用postman跑通逻辑(post 使用JSON格式)
+8、前端--页面导入(访问直接输入路径即可 static下方路径)
+9、根据controller层的相关方法，完成前端页面的构建
+===完成案例的开发过程，springboot基础===
+
+
+=====打包上线的过程=======
+项目完成后都要打包上线到服务器中，这是windows系统下 打包上线的相关过程
+1、使用maven(mvn package)指令对其进行打包
+    PS：如果测试数据会对原项目产生影响，那么应该点击 “ 切换‘跳过测试’模式 ” 这样打包之后的代码不包含测试数据
+        pom.xml文件需要含有spring-boot-maven-plugin 插件，不然即使打包也无法正常运行
+2、选择 打包所生成的jar包文件 在对应位置 cmd 启动（java –jar xxx.jar）
+3、若没有报错 则表示部署成功
+
+PS 出现端口占用的问题
+查询端口 netstat -ano
+查询指定端口 netstat -ano |findstr "端口号"
+根据进程PID查询进程名称 tasklist |findstr "进程PID号"
+根据PID杀死任务 taskkill /F /PID "进程PID号"
+根据进程名称杀死任务 taskkill -f -t -im "进程名称"
+
+===Linux版本下部署===
+java的指令与windows情况下大同小异，几乎无差别
+（注意数据库，端口等细节问题，可参考视频：https://www.bilibili.com/video/BV15b4y1a7yG?p=56）
+
+====高级文件配置====
+1、临时属性
+    在操作系统部署的时候加上 --server.port=80，若有多个 使用空格隔开
+    在idea上测试时 在 运行/测试 窗口，进行参数配置 配置的方式
+        原理：
+            在启动文件 SpringApplication.run(XXX.class, args)中，args表示传递的参数，为了安全起见禁止参数，可取消
+
+2、配置文件的优先级（从低到高依次排序，默认文件的后缀为yml）
+    （第四级第三级 在idea测试环境下可以使用）
+    第四级：resources下的application.yml：项目类路径配置文件：服务于开发人员本机开发与测试
+    第三级：resources下的config/application.yml：项目类路径config目录中配置文件：服务于项目经理整体调控
+    （部署上线时使用）
+    第二级：文件同级（指jar包）的 application.yml：工程路径配置文件：服务于运维人员配置涉密线上环境
+    第一级：文件同级（指jar包）的 config/application.yml：工程路径config目录中配置文件：服务于运维经理整体调控
+
+3、指定文件名称
+    在参数处设置文件名称：（idea使用有效，打包部署并不生效）
+        --spring.config.name=xxx(可省略后缀)
+        --spring.config.location=classpath:/xxx.yml （使用路径的方式）
+        --spring.config.location=classpath:/xxx.yml,classpath:/xxx.yml（多个配置文件，如果有覆盖现象，后面会覆盖之前的内容）
+4、更多优先级配置参考：
+    https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config

@@ -1,0 +1,36 @@
+server:
+  port: 8888
+
+# 开启debug模式 全局开启
+# debug: true
+
+# 详细的日志配置
+logging:
+  # 分组
+  group:
+    controller: com.study.main.controller
+  # 给不同的组指定不同的等级
+  level:
+    # 给根节点的日志权限设置为info
+    root: info
+    # 给 controller组 的权限设置为debug
+    controller: debug
+    # 直接给对应的文件设置 权限
+    com.study.main.demo: debug
+
+  # 设置日志输出格式(了解即可)
+  # %d：时间 %m：消息 %n：换行  %clr：使用颜色
+  pattern:
+    # 更具体的 %d中能自定义时间输出的格式
+    console: "%d{yyyy:mm:dd HH:mm:SS} %clr(%p) ---- [%16t] %clr(%-40.40c){cyan} : %m %n"
+
+  # 设置日志文件输出（普通设置）
+  file:
+    name: D:\java_code\springboot\P4_multi-environment\src\main\resources\server.log
+  # 日志文件输出一些详细配置
+  logback:
+    rollingpolicy:
+      # 指定最大的大小
+      max-file-size: 1MB
+      # 指定产生新文件的名称 %d 表示时间 %i 表示数量
+      file-name-pattern: D:\java_code\springboot\P4_multi-environment\src\main\resources\server.%d{yyyy-MM-dd}.%i.log

@@ -1,0 +1,22 @@
+## 整合
+#spring:
+#  profiles:
+#    # 使用的环境是 dev环境
+#    active: dev
+#    # 其中还包括 dev中的DB MVC
+#    # springboot读取的顺序为："devDB", "devMVC", "dev" 后面会覆盖前面
+#    include: devDB,devMVC
+
+
+# springboot2.4版本新特性
+spring:
+  profiles:
+    # 指定此环境是 dev环境
+    active: pro
+    group:
+      # 分组 指定dev环境下需要读取的配置
+      # springboot读取的顺序为："dev", "devDB", "devMVC"
+      "dev": devDB,devMVC
+      # 分组 指定 pro 环境下需要读取的配置
+      # springboot读取的顺序为："pro", "devDB", "proMVC"
+      "pro": devDB,proMVC
