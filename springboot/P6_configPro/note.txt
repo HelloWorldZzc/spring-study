@@ -1,0 +1,48 @@
+====高级配置====
+1、@ConfigurationProperties基础使用
+    在P1基础的时候，使用@ConfigurationProperties可以读取yml中的配置文件
+
+2、@ConfigurationProperties绑定第三方属性
+    在实际开发的过程中，有些文件并不是我们所写，但是仍然能通过此标注进行绑定
+
+
+3、宽松绑定
+    @ConfigurationProperties绑定属性支持属性名宽松绑定
+        以本案例为例，yml文件的druid DriverClassName，可以在任意修改大小写，添加 -或_ ，仍然能读出，因为其支持宽松绑定
+    @ConfigurationProperties(prefix ="xxx")
+        xxx仅能使用纯小写字母、数字、下划线(存在宽松绑定，仍然可以读出)
+    PS：
+        在P1课程中读取yml还能通过@value的方式读取，但@value的方式读取不支持宽松绑定
+
+(1、2、3具体案例见启动类)
+
+4、常用计量单位（pojo.Sconfig 测试类）
+    --在一些环境下需要使用精确时间、内存大小。此时可以使用JDK8提供的时间与空间计量单位
+    举例：
+        private Duration time;
+        private DataSize maxSize;
+    读取的方式还是参照@ConfigurationProperties的方式
+
+    --在yml配置文件中，可能会存在不带单位的问题
+        时间可通过@DurationUnit(ChronoUnit.MINUTES)指定
+        大小可通过@DataSizeUnit(DataUnit.MEGABYTES)指定
+
+    在yml配置文件没有写明单位的情况下，可使用注解指定的单位(指定以yml指定为准)
+
+5、约束条件(测试类中进行测试)
+    给yml中的配置添加约束条件，例如最大等待时间不能超过多少，否则程序会报错
+    1、添加JSR303规范坐标与Hibernate校验框架对应坐标
+    2、对需要被检验的实体类加上@Validated注解
+    3、同时在实体类上添加相关的注解说明校验规则
+        如何回到存在哪些校验规则？使用@MAX,点击获取class文件，点击最上层package javax.validation.constraints，可跳转到源代码界面
+
+6、约束条件的其他用法（pojo.demo controller.java）
+    （可用在任何需要读取，传输等校验的地方）
+    在前端传入的数据中，可以设置约束，当不符合约束时候，程序报错
+    案例：
+        pojo.demo 中定义好age，并在其中添加相关约束条件、@Validated注解
+        在controller文件模拟数据请求的post，get方式，需要传输age
+        （ 进行校验需要加上注解@Validated，例如 public String get(@Validated demo demo)）
+        此时，若传输的age满足条件程序正常运行，否则则程序会报错而停止
+
+

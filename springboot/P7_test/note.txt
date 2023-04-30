@@ -1,0 +1,38 @@
+=====测试=====
+1、加载测试专用属性
+    在测试的过程中，可能需要使用到一些专门的属性，可能与yml不同，也可能在yml中不存在相关配置。因此需要加载测试的相关专属属性
+
+    1-1 使用@SpringBootTest(properties = "config.temp_prop='springboot test1....'")
+    1-2 使用@SpringBootTest(args = "--config.temp_prop='springboot test2....'")
+    (读取的方式可参考P1 yml中数据的读取方式)
+
+    在测试类中可以使用1-1 1-2的两种方式声明专属属性，1-1的优先级高于1-2(一般只会存在一个)
+
+2、加载测试专用配置
+    有些配置可能是测试的时候才使用，其他的时候不用的，那么可以使用测试专用配置
+    使用@Import注解 加载当前测试类专用的配置
+
+3、web环境测试
+    测试默认都是关闭web类测试的，但是可以使用web环境模拟测试
+    3-1 模拟端口
+        需要在上注解上进行配置：@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        RANDOM_PORT：随机端口
+        DEFINED_PORT：默认端口
+        NONE：不开启（默认）
+    3-2 web环境模拟
+        调用：MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/");
+        执行：mvc.perform(builder);
+    3-3 测试
+        可根据测试结果，返回类型，返回头信息...与执行返回的值做比较
+        一样则通过，否则则报错
+
+4、业务测试事务回滚(无案例)
+    在打包的过程中，需要走测试案例，但不希望他对数据库有操作，可以使用事务对其进行回滚，达到目的
+    操作(仅测试类有效)
+        给测试类添加注解@Transactional,则springboot会对测试用例对应的事务提交操作进行回滚
+        如果想在测试用例中提交事务，通过@Rollback(true/false)注解设置(true回滚 false不回滚，加上@Transactional，默认为true)
+
+5、测试用例数据--随机数
+    测试用例数据通常采用随机数，使用springboot提供的随机数为其赋值
+    随机数书写方式：yml配置文件中
+    案例实现：TestApplication4 | 启动类

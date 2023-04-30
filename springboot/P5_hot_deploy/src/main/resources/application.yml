@@ -1,0 +1,8 @@
+# 自定义不参与重启排除项
+spring:
+  devtools:
+    restart:
+      # 书写方式 public/**,static/**
+      exclude: static/**
+      # 热部署是否启动
+      enabled: true

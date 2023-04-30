@@ -1,0 +1,12 @@
+# 加载测试专用属性
+config:
+  temp_prop: "springboot test...."
+
+# 测试随机数（只是用于演示，真实开发环境如果使用那么会在不同的yml数据页面中）
+testcast:
+  book:
+    id: ${random.int} #随机整数
+    id2: ${random.int(10)} #10以内的整数
+    count: ${random.int(10,20)} #10-20之间整数
+    uuid: ${random.uuid} # 随机UUID
+    name: 随机+${random.value}

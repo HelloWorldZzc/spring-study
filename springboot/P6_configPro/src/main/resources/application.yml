@@ -1,0 +1,17 @@
+# 使用@ConfigurationProperties读取配置文件
+config:
+  name: zzc
+  age: 20
+  sex: 1
+  DriverClassName: demo.....Driver
+
+
+Druid:
+  # driverClassName: demo.....Driver1
+  DriverclassName: demo.....Driver2
+
+# 常用计量单位
+Sconfig:
+  time: 100S
+  maxCount: 100
+  maxSize: 10

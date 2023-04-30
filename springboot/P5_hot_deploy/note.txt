@@ -1,0 +1,27 @@
+====热部署===
+每次修改了配置后需要重新启动才能生效，比较麻烦，使用热部署的方式能有效解决
+
+1、手动热部署
+    导入相关maven依赖（热部署工具类）
+    每次修改完成后，点击构建--->构建项目(ctrl + F9)
+    比重新运行更快：仅仅加载当前开发者自定义开发的资源，不加载jar资源
+
+2、自动热部署
+    1、setting-->compiler--->build project automatically(自动构建项目)
+    2、修改idea的注册表(ctrl + alt + shift +/ 选择注册表)，勾选compiler.automake.allow.when.app.running
+    自动热部署的方式：idea失去焦点5秒后自动热部署
+
+3、热部署的范围：
+    默认不触发重启的目录列表
+        /META-INF/maven
+        /META-INF/resources
+        /resources
+        /static
+        /public
+        /templates
+    同时，也可以在application.yml文件配置不触发重启的排除项
+
+4、利用优先级 关闭热部署功能
+    在application.yml中配置：spring.devtools.restart.enabled: false 可关闭热部署功能
+    但是由于存在多个配置文件，可能在某个配置文件关闭了但最后结果仍然打开的情况
+    那么可以在优先级更高的地方设置，比如java环境变量中(启动类)
