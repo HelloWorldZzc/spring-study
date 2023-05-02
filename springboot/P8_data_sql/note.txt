@@ -1,0 +1,53 @@
+===============数据层解决方案==================
+在现有的案例中，数据层的解决方案为（pom.xml存在相关依赖）
+    数据源：Druid
+    持久化技术：mybatis-Plus / mybatis
+    数据库：mysql
+
+(无案例)
+1、数据源配置
+    springboot提供了三种内嵌数据源
+        --HiKariCP:默认内置数据源对象
+        --TomCat提供DataSource:在前置不可用，且在web环境中，将使用Tomcat服务器配置数据源对象
+        --Commons DBCP:前置均不可用，将使用dbcp数据源
+    PS：无法设置具体的数据源配置信息，仅提供基本的连接相关配置（需配置在下一级配置中设定）
+    PS：在其他数据层案例中，移除存在的数据源，则会展示出默认数据源，通过其能观察出
+
+
+(本案例)
+2、内置数据源解决方案--JDBCTemplate
+    需要导入相关依赖后，使用@Autowired自动装配JdbcTemplate对象后，对其进行操作
+    具体操作见测试案例
+
+    jdbc相关配置：
+    spring.jdbc.template.query-timeout 查询超时时间
+    spring.jdbc.template.max-rows 最大行数
+    spring.jdbc.template.fetch-size 缓存行数
+
+3、内嵌数据库(了解即可)
+    springboot提供了三种内嵌数据库
+        --H2
+        --HSQL
+        --Derby
+    H2的简单介绍(了解)
+        3-1导入相关坐标
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <scope>runtime</scope>
+            </dependency>
+        3-2 设置当前项目为web工程，并配置管理
+            spring.h2.console.path=/h2
+            spring.h2.console.enabled=true (仅用于开发阶段，其他时候要记得关闭)
+            通过path设置路径访问，用户名sa，密码123456
+        3-3 yml中的相关配置
+            spring.datasource.url=jdbc:h2:~/test
+            spring.datasource.hikari.driver-class-name=org.h2.Driver
+
+4、总结
+    使用已经存在/内置的相关设置，可以进行随意搭配。jdbc基础在一些地方仍有应用场景，但内置数据库了解即可

@@ -1,0 +1,32 @@
+=====Mongodb操作=====
+1、MongoDB简介
+    MongoDB是一个开源、高性能、无模式的文档型数据库。NoSQL数据库产品中的一种，是最像关系型数据库的非关系型数据库
+    适用场景：
+        永久存储与临时存储相结合、修改频度较高的数据、修改数据块的数据
+2、MongoDB的使用
+    2-1 下载zip压缩包并解压
+    2-2 在bin目录下使用cmd命令 mongod --dbpath=..\data 启动数据库
+    2-3 此时可双击mongo.exe文件启动 或 在数据库可视化界面中使用
+
+3、MongoDB的基本语法
+    3-1 选择数据库 use study;
+    3-2 创建数据表(集合) db.createCollection("book");
+    3-3 查询所有 db.book.find({})
+    3-4 添加数据 db.book.insertOne({"name":"springboot"})  db.book.insertOne({name:"msql",type:"java"})
+    3-5 条件查询 db.book.find({type:"java"})
+    3-6 修改数据 db.book.updateOne({name:"springboot"},{$set:{name:"springboot_change"}})
+    3-7 删除数据 db.book.remove({name:"msql"})
+    （其他操作见 MongoDB.png）
+
+4、MongoDB加入boot
+    1、导入MongoDB驱动
+    2、配置客户端yml
+    3、自动装配相关属性，调用相关属性执行数据库操作
+
+
+===============ElasticSearch（ES）==============
+1、简介：
+    Elasticsearch是一个开源的、分布式的全文搜索和分析引擎。它可以处理大量的结构化和非结构化数据，并提供了快速、准确的搜索、实时分析和数据可视化功能
+2、基本使用 与 springboot链接
+    由于展示未学习ES相关内容，本部分内容暂时省略，相关的学习网址如下：
+    https://www.bilibili.com/video/BV15b4y1a7yG/?p=119

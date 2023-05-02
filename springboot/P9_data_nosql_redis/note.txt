@@ -1,0 +1,50 @@
+======nosql解决方案-Redis======
+1、Redis介绍
+    key-value存储结构的nosql数据库
+        --支持多种数据库存储格式
+        --支持持久化
+        --支持集群
+    Redis下载：https://github.com/tporadowski/redis/releases
+    Redis启动（windows）：
+        服务端启动：redis-server.exe redis.windows.config
+        客户端启动：redis-cli.exe
+2、整合
+    2-1导入坐标（创建工程的时可自主选择）
+        <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    2-2 yml配置
+
+3、redis的基本使用
+    3-1、redisTemplate与stringRedisTemplate
+        两者军事redis提供用来访问数据库的模板类，前者为泛型类，可以操作任意类型；后者主要操作字符类型(其他类型也行)
+        在命令窗口中，均表示以字符串操作的类型，因此后者能查询/修改影响命令行窗口，前者不行
+        主要区别：默认序列化器和可操作的数据类型
+
+    3-2 redisTemplate的使用(demo1)
+        自动装配(由于redisTemplate范围较大，由于多态因此会匹配到多个，因此需要加上@Qualifier("redisTemplate")指定)
+        获取操作对象
+        操作
+
+    3-3 stringRedisTemplate的使用(demo2)
+        同3-2 可直接自动装配
+        但需要指明泛型（更具体的使用）
+
+    3-4 其他数据类型(hash)的使用(demo3)
+        同3-3
+        hash类型的使用
+
+
+4、lettcus与jedis
+    lettcus与jedis是两种不同的客户端配置类型，springboot默认使用lettcus
+    两者区别：
+        jedis连接Redis服务器是直连模式，当多线程模式下使用iedis会存在线程安全问题，解决方案可以通过配置连接池使每个连接专用，这样整体性能就大受影响
+        lettcus基于Netty框架进行与Redis服务器连接，底层设计中采用StatefulRedisConnection。StatefulRedisConnection自身是线程安全的，可以保障并发访问安全问题，所以一个连接可以被多线程复用。当然lettcus也支持多连接实例一起工作。
+    切换配置：
+        导入相关坐标
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+            </dependency>
+        修改配置文件：spring.redis.client-type=jedis
