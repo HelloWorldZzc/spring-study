@@ -1,0 +1,14 @@
+#redis缓存的相关设置
+spring:
+  redis:
+    port: 6379
+    host: 127.0.0.1
+  # 缓存的相关配置
+  cache:
+    type: redis
+    # 缓存中使用redis缓存，做一些相关的配置
+    redis:
+      use-key-prefix: true  # 是否使用前缀名
+      key-prefix: sms_  # 追加自定义前缀名
+      time-to-live: 20s  # 有效时长
+      cache-null-values: false  # 是否允许存储空值
