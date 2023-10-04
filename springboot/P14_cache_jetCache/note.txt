@@ -1,0 +1,56 @@
+=====================缓存（jetCache）==========================
+1、简介：
+    jetCache（阿里）对SpringCache进行了封装，在原有功能基础上实现了多级缓存、缓存统计、自动刷新、异步调用、数据报表等功能同时也设定了本地缓存与远程缓存的多级缓存解决方案
+    本地缓存（local）
+        LinkedHashMap（☆）
+        Caffeine
+    远程缓存（remote）
+        Redis（☆）
+        Tair
+2、使用（半自动化使用-验证码案例）
+    (注意maven中springboot的版本问题...可能会引发奇奇怪怪的问题)
+    2-1 加入相关的注解，springboot不对其版本进行维护(因为远程使用redis，因此导入依赖jetcache-starter-redis)
+    2-2 开启redis，并在yml中进行配置，分别测试本地与远程
+    2-3 在启动类中标注添加注解：@EnableCreateCacheAnnotation（jetcache and 半自动化模式 独有）
+    2-4 创建缓存对象
+        @CreateCache(area = "sms",name = "sms_code",expire = 3600,timeUnit = TimeUnit.SECONDS,cacheType = CacheType.REMOTE)
+        注解变量：
+            area：缓存区域名称，用于指定缓存区域。若不写，则为默认缓存；注意缓存名称需要在配置文件中声明
+            name：缓存名称，用于指定缓存对象的名称。在这个例子中，缓存名称为 sms_code。
+            expire：缓存过期时间，用于指定缓存对象的过期时间。
+            timeUnit：缓存过期时间单位，与 expire 参数配合使用。
+            cacheType：缓存类型，用于指定缓存类型。在这个例子中，缓存类型为 CacheType.REMOTE，表示使用远程缓存，还能使用本地缓存local。
+
+        private Cache<String,String> jetCache;
+        在需要使用缓存的地方操作缓存：
+            存入jetCache.put
+            取出jetCache.get
+        对象的其他方法：
+            remove(K key)：根据键从缓存中删除对应的键值对。
+            removeAll()：删除缓存中所有的键值对。
+            count()：获取缓存中键值对的数量。
+            keys()：获取缓存中所有的键。
+            values()：获取缓存中所有的值。
+            exists(K key)：判断缓存中是否存在指定的键。
+
+
+3、使用（全自动化---注解声明式）
+    对没有硬编码习惯的程序员来说，使用注解能够更加方便的解决相关问题
+    使用
+        3-1：同2-1
+        3-2：同2-2
+        3-3：在启动类上添加相关注解（声明方式特有）
+        3-4 添加cache注解完成项目
+        举例：
+            //使用缓存
+            @Cached(name = "bookCache_",key = "#id",expire = 20,timeUnit = TimeUnit.SECONDS,cacheType = CacheType.REMOTE)
+            //缓存自动刷新
+            @CacheRefresh(refresh = 100,timeUnit = TimeUnit.SECONDS)
+            //修改缓存
+            @CacheUpdate(name = "bookCache_",key = "#book.id",value = "#book")
+            //删除缓存
+            @CacheInvalidate(name = "bookCache_",key = "#id")
+4、注意点：
+    --缓存返回的类型如果是自定义Javabean类型，那么在bean中需要完成序列化过程（implements Serializable）
+    --注意版本号
+    --2与3的 属性变量较为相似，可结合理解

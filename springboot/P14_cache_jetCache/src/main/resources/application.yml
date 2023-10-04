@@ -1,0 +1,62 @@
+# 数据库&MP基本配置
+spring:
+  # 基础配置，允许循环依赖(包冲突问题)
+#  main:
+#    allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url:  jdbc:mysql://localhost:3306/mybatis
+
+# mybatisPlus 日志输出方式
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 缓存相关配置
+jetcache:
+  # 统计信息输出时间，单位为分钟，默认为1
+  statIntervalMinutes: 1
+  #本地配置
+  local:
+    # 本地默认缓存配置
+    default:
+      # 本地缓存的类型，使用hashMap
+      type: linkedhashmap
+      # 本地缓存的序列化方式，为JSON
+      keyConvertor: fastjson
+    # sms缓存类型
+    sms:
+      # sms的类型，使用hashMap
+      type: linkedhashmap
+      # sms存的序列化方式，为JSON
+      keyConvertor: fastjson
+  # 远程配置
+  remote:
+    # 远程配置中，默认缓存区域配置
+    default:
+      # 远程缓存类型
+      type: redis
+      host: 127.0.0.1
+      port: 6379
+      #远程缓存键序列化方式
+      keyConvertor: fastjson
+      #远程缓存值序列化方式
+      valueEncode: java
+      #远程缓存值反序列化方式
+      valueDecode: java
+      # 连接池配置
+      poolConfig:
+        #最大连接数
+        maxTotal: 50
+    # 名称为sms的远程缓存区域配置
+    sms:
+      type: redis
+      host: localhost
+      port: 6379
+      poolConfig:
+        maxTotal: 50
+
+
+
