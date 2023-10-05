@@ -1,0 +1,13 @@
+=================邮件（javaMail）==================
+1、了解邮件相关协议
+    SMTP（Simple Mail Transfer Protocol）：简单邮件传输协议，用于发送电子邮件的传输协议
+    POP3（Post Office Protocol - Version 3）：用于接收电子邮件的标准协议
+    IMAP（Internet Mail Access Protocol）：互联网消息协议，是POP3的替代协议
+
+2、操作过程
+    2-1 导入javaMail的相关依赖
+    2-2 在application.yml中对其进行配置（注意：密码选项是指在邮箱中获取的SMTP服务密码）
+    2-3 简单邮件的操作 sendSimpleMail.java(收件人，寄件人，标题，内容)
+    2-4 复杂邮件的操作 sendMail.java(在简单邮件的基础上+超链接、附件)
+
+PS: 使用不同的邮箱获取SMTP服务密码不同，在QQ邮箱中，需要使用几个特殊的配置(yml中)

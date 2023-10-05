@@ -1,0 +1,14 @@
+spring:
+  mail:
+    host: smtp.qq.com
+    username: zzc_wx@qq.com
+    password: nlxxt*******iijj
+
+    # 针对QQ邮箱 做以下的配置
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
