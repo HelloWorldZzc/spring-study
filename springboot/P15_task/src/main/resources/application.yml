@@ -1,0 +1,14 @@
+# 定时任务相关配置
+spring:
+  task:
+    scheduling:
+      pool:
+        #用于配置执行定时任务的线程池大小
+        size: 5
+      #用于配置应用程序停止时任务调度器的关闭方式
+      shutdown:
+        #指定了调度器是否应该等待所有正在运行的任务完成后再关闭；如果设置为 false，则调度器将立即关闭
+        #可能会中断正在运行的任务
+        await-termination: false
+        # 属性指定了调度器在关闭前等待任务完成的最长时间
+        await-termination-period: 10s
