@@ -1,0 +1,50 @@
+=================消息订阅================
+1、消息介绍：
+    Java中的消息（Message）通常指的是在应用程序之间传递的数据或事件。
+
+2、企业级应用中广泛使用的三种异步消息传递技术
+    2-1 JMS：一个规范，类似于JDBC规范，提供了与消息服务相关的api接口
+        JMS消息模型：
+            点对点：
+                点对点消息是指消息发送方将消息发送到一个特定的接收方，只有该接收方能够接收并处理该消息(通常使用JMS实现)
+            发布订阅模式：
+                发布订阅消息是指消息发送方将消息发布到一个主题（Topic），而所有订阅该主题的接收方都能够接收并处理该消息。
+        JMS消息种类：
+            TextMessage、MapMessage、BytesMessage、StreamMessage、ObjectMessage、Message(只有消息头和属性)
+        JMS实现：
+            ActiveMQ、Redis、HornetMQ、RabbitMQ、RocketMQ（没有完全遵守JMS规范）
+    2-2 AMQP:一种协议，规范了网络交互的数据格式、兼容JMS
+        优点：具有跨平台性，服务器供应商，生产者，消费者可以使用不同的语言来实现
+        AMQP消息模型：
+            direct exchange、fanout exchange、topic exchange、headers exchange、system exchange
+        AMQP消息种类：byte[](因为要跨平台)
+        AMQP实现：RabbitMQ、StormMQ、RocketMQ
+    2-3 MQTT（Message Queueing Telemetry Transport）
+        消息队列遥测传输，专为小设备设计，是物联网（IOT）生态系统中主要成分之一
+
+3、安装ActiveMq
+    下载地址：https://activemq.apache.org/components/classic/download/
+    解压缩后，点击:bin/win64/activemq.bat
+    访问服务器：localhost:8161
+    服务端口:61616，管理后台端口：8161
+    用户名密码：admin
+
+3、模拟--短信收发通知
+    post：获取要准备发送验证码的手机号，把他放入消息中
+    get：从消息中获取手机号，进行发验证码的操作
+
+    与其他的第三方工具相同，自动注入JmsMessagingTemplate，根据api进行相关操作(见messageService.java)
+
+4、补充
+    4-1 监听器
+        上述案例中，post请求把信息放入消息中，get请求把消息取出进行操作。
+        但如果想放入消息中就立即操作，可以使用监听器
+
+    4-2 消费完成的消息转入另外的消息队列
+        使用注解@SendTo("order.other.queue.id")
+        函数的返回值表示传入另外消息队列的值
+
+=============================
+还有其他的消息组件，由于安装繁琐及使用情况不确定未进行学习，相关的课程链接如下:
+https://www.bilibili.com/video/BV15b4y1a7yG?p=129
+
