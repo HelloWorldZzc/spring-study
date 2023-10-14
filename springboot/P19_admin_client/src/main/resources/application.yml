@@ -1,0 +1,26 @@
+server:
+  port: 8080
+#客户端指定服务器
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost
+# 管理其中展示内容（展示所有，健康属性必须展示）
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # springboot版本过高，为了让server中显示info，需要在此配置
+  info:
+    env:
+      enabled: true
+
+# server中info的配置方式1
+info:
+  title : "demo-springboot-server"
+  version : @project.version@

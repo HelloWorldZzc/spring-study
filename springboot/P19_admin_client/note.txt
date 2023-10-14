@@ -1,0 +1,28 @@
+============监控客户端=============
+1、客户端启动
+    1-1 导入监控客户端相关依赖
+    1-2 在yml文件中进行配置监控服务端信息
+
+2、进阶操作-为info端点添加自定义指标
+方式1：在yml中添加
+    如yml文件中info所示，直接将要添加的信息填入其中
+    注：
+        在springboot版本号较高时，需要打开info开关
+
+方式2：实现InfoContributor接口
+    使用接口可以忽略方式1的info开关问题，通过接口重写builder中的方法，对info进行展示
+
+3、进阶操作-health中展示相关属性方法
+    继承AbstractHealthIndicator并实现方法
+    在其中使用builder方法对其进行相关操作
+
+4、进阶操作-自定义性能(metrics)
+    使用MeterRegistry meterRegistry相关方法
+
+5、进阶操作-自定义切点
+    5-1 自定义切点ID @Endpoint(id = "demoPon")
+    5-2 添加注解：@ReadOperation
+
+    PS：自定义切点的ID，能通过actuator/id访问，返回值为添加注解方法的返回值
+
+PS：仅了解一些客户端的相关配置，仅此而已
